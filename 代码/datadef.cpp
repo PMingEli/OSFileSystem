@@ -131,5 +131,3 @@ directory currentDirectory;
 char ab_dir[100][14];
 
 unsigned short dir_pointer;
-
-int b = 0; //ceshigribgutb
