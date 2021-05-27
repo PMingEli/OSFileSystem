@@ -132,5 +132,4 @@ char ab_dir[100][14];
 
 unsigned short dir_pointer;
 
-//23t872guergfu54biuvbtrui druebfufbryufvuyebvhreuy
-int aaaaaa = 0; //ceshi
+int b = 0; //ceshigribgutb
