@@ -59,27 +59,27 @@ const unsigned short OWN_R = 1 << 8;
 //inode设计
 struct inode
 {
-    unsigned int i_ino;            //inode号.
-    unsigned int di_addr[NADDR];   //Number of data blocks where the file stored.
+    unsigned int i_ino;          //inode号.
+    unsigned int di_addr[NADDR]; //Number of data blocks where the file stored.
     unsigned short di_number;    //Number of associated files.
-    unsigned short di_mode;        //文件类型.
-    unsigned short icount;        //连接数
-    unsigned short permission;    //文件权限
-    unsigned short di_uid;        //文件所属用户id.
-    unsigned short di_grp;        //文件所属组
-    unsigned short di_size;        //文件大小.
+    unsigned short di_mode;      //文件类型.
+    unsigned short icount;       //连接数
+    unsigned short permission;   //文件权限
+    unsigned short di_uid;       //文件所属用户id.
+    unsigned short di_grp;       //文件所属组
+    unsigned short di_size;      //文件大小.
     char time[83];
 };
 
 //超级块设置
 struct filsys
 {
-    unsigned short s_num_inode;            //inode总数
-    unsigned short s_num_finode;           //空闲inode数.
-    unsigned short s_size_inode;           //inode大小.
-    unsigned short s_num_block;            //block的数量.
-    unsigned short s_num_fblock;           //空闲块的数量.
-    unsigned short s_size_block;           //block的大小.
+    unsigned short s_num_inode;  //inode总数
+    unsigned short s_num_finode; //空闲inode数.
+    unsigned short s_size_inode; //inode大小.
+    unsigned short s_num_block;  //block的数量.
+    unsigned short s_num_fblock; //空闲块的数量.
+    unsigned short s_size_block; //block的大小.
     unsigned int special_stack[50];
     int special_free;
 };
@@ -87,28 +87,28 @@ struct filsys
 //目录设计
 struct directory
 {
-    char fileName[20][FILE_NAME_LENGTH];    //目录名称
-    unsigned int inodeID[DIRECTORY_NUM];    //inode号
+    char fileName[20][FILE_NAME_LENGTH]; //目录名称
+    unsigned int inodeID[DIRECTORY_NUM]; //inode号
 };
 
 //账户设计
 struct userPsw
 {
-    unsigned short userID[ACCOUNT_NUM];                 //用户id
-    char userName[ACCOUNT_NUM][USER_NAME_LENGTH];       //用户名
-    char password[ACCOUNT_NUM][USER_PASSWORD_LENGTH];   //用户密码
-    unsigned short groupID[ACCOUNT_NUM];                //用户所在组id
+    unsigned short userID[ACCOUNT_NUM];               //用户id
+    char userName[ACCOUNT_NUM][USER_NAME_LENGTH];     //用户名
+    char password[ACCOUNT_NUM][USER_PASSWORD_LENGTH]; //用户密码
+    unsigned short groupID[ACCOUNT_NUM];              //用户所在组id
 };
 
 //功能函数声明
-void CommParser(inode*&);
+void CommParser(inode *&);
 
-void Help();        //帮助信息
+void Help(); //帮助信息
 
-void Sys_start();   //启动文件系统
+void Sys_start(); //启动文件系统
 
 //全局变量
-FILE* fd = NULL; //文件系统位置
+FILE *fd = NULL; //文件系统位置
 
 //超级块
 filsys superBlock;
@@ -131,3 +131,5 @@ directory currentDirectory;
 char ab_dir[100][14];
 
 unsigned short dir_pointer;
+
+//23t872guergfu54biuvbtrui
