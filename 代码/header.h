@@ -155,3 +155,9 @@ directory currentDirectory;
 char ab_dir[100][14];
 
 unsigned short dir_pointer;
+//帮助
+void Help();
+//初始化文件系统
+bool initsystem();
+//系统启动
+void systemstart();
