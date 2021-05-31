@@ -1,3 +1,6 @@
+#ifndef HEADER_H_INCLUDED
+#define HEADER_H_INCLUDED
+
 #include<stdio.h>//c语言的的unix文件输入输出库
 #include<fcntl.h>//根据文件描述词操作文件的特性
 #include<string>
@@ -9,24 +12,7 @@
 #include<string.h>
 using namespace std;
 
-//自定义不回显字符
-int getch()
-{
-    int c = 0;
-    struct termios org_opts, new_opts;
-    int res = 0;
-    res = tcgetattr(STDIN_FILENO, &org_opts);
-    assert(res == 0);
-    memcpy(&new_opts, &org_opts, sizeof(new_opts));
-    new_opts.c_lflag &= ~(ICANON | ECHO | ECHOE | ECHOK | ECHONL | ECHOPRT | ECHOKE | ICRNL);
-    tcsetattr(STDIN_FILENO, TCSANOW, &new_opts);
-    c = getchar();
-    res = tcsetattr(STDIN_FILENO, TCSANOW, &org_opts);
-    assert(res == 0);
-    if(c == '\n') c = '\r';
-    else if(c == 127) c = '\b';
-    return c;
-}
+
 
 
 //以下定义常量
@@ -131,33 +117,111 @@ struct userPsw
     unsigned short groupID[ACCOUNT_NUM];                //用户所在组id
 };
 
-//全局变量
-FILE* fd = NULL; //文件系统位置
+
 
 //超级块
-filsys superBlock;
+extern filsys superBlock;
 
 //1代表已经使用，0表示空闲
-unsigned short inode_bitmap[INODE_NUM];
+extern unsigned short inode_bitmap[INODE_NUM];
 
 //用户
-userPsw users;
+extern userPsw users;
 
 //用户id
-unsigned short userID = ACCOUNT_NUM;
+extern unsigned short userID;
 
 //用户名
-char userName[USER_NAME_LENGTH + 6];
+extern char userName[USER_NAME_LENGTH + 6];
 
 //当前目录
-directory currentDirectory;
+extern directory currentDirectory;
 
-char ab_dir[100][14];
+extern char ab_dir[100][14];
 
-unsigned short dir_pointer;
-//帮助
-void Help();
+extern unsigned short dir_pointer;
+
+//功能函数声明
+void CommParser(inode*&);
+
+void Help();        //帮助信息
+
+void Sys_start();   //启动文件系统
+
+extern FILE* fd; //文件系统位置
+
+int getch();
+
+//寻找空闲块
+void find_free_block(unsigned int &inode_number);
+
+//初始化文件系统的各项功能
+bool Mount();
+
+//登出功能
+void Logout();
+
+//根据文件名创建文件
+bool CreateFile(const char* filename);
+
+//删除文件
+bool DeleteFile(const char* filename);
+
+//重置block
+void recycle_block(unsigned int &inode_number);
+
 //初始化文件系统
-bool initsystem();
-//系统启动
-void systemstart();
+bool Format();
+
+//登录模块
+bool Login(const char* user, const char* password);
+
+//根据文件名打开文件
+inode* OpenFile(const char* filename);
+
+//在文件尾添加数据
+int Write(inode& ifile, const char* content);
+
+//输出文件信息
+void PrintFile(inode& ifile);
+
+//创建新目录，新目录包含. ..
+bool MakeDir(const char* dirname);
+
+//删除一个目录和目录下的所有文件
+bool RemoveDir(const char* dirname);
+
+//打开一个目录
+bool OpenDir(const char* dirname);
+
+//显示当前目录下的文件信息
+void List();
+
+//显示绝对目录.
+void Ab_dir();
+
+//修改文件权限
+void Chmod(char* filename);
+
+//改变文件所属
+void Chown(char* filename);
+
+//改变文件所属组.
+void Chgrp(char* filename);
+
+//修改密码
+void Passwd();
+
+//用户管理
+void User_management();
+
+//对文件或目录重命名
+void Rename(char* filename);
+
+//链接
+bool ln(char* filename);
+
+//文件复制
+bool Copy(char* filename, inode*& currentInode);
+
+#endif // HEADER_H_INCLUDED

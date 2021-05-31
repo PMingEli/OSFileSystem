@@ -1,13 +1,13 @@
 #include"header.h"
-//系统启动
-void systemstart() {
-    //载入文件系统
+//初始化文件系统的各项功能
+bool Mount()
+{
     //打开文件卷
     fd = fopen("data", "rb+");
     if (fd == NULL)
     {
         printf("文件系统没有找到!\n");
-        exit(0);
+        return false;
     }
     
     //读取超级块信息
@@ -26,10 +26,5 @@ void systemstart() {
     fseek(fd, DATA_START + BLOCK_SIZE, SEEK_SET);
     fread(&users, sizeof(userPsw), 1, fd);
     
-    
-    printf("**************************************************************\n");
-    printf("*                                                            *\n");
-    printf("*               欢迎使用文件管理系统                             *\n");
-    printf("*                                                            *\n");
-    printf("**************************************************************\n");
-}
+    return true;
+};

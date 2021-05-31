@@ -1,6 +1,6 @@
 #include"header.h"
 //初始化文件系统
-bool initsystem()
+bool Format()
 {
     //在当前目录新建一个文件作为文件卷
     FILE* fd = fopen("data", "wb+");
@@ -18,7 +18,7 @@ bool initsystem()
     superBlock.s_size_block = BLOCK_SIZE;
     superBlock.s_num_fblock = BLOCK_NUM - 2;
     superBlock.s_num_finode = INODE_NUM - 2;
-    superBlock.special_stack[0] = 99;
+    superBlock.special_stack[0] = 47;
     for (int i = 1; i < 50; i++)
     {
         superBlock.special_stack[i] = 49 - i;
@@ -149,7 +149,7 @@ bool initsystem()
     strcpy(paccouting_tmp.userName[0], "root");
     strcpy(paccouting_tmp.userName[1], "ming");
     strcpy(paccouting_tmp.password[0], "123456");
-    strcpy(paccouting_tmp.password[1], "pmj20184317");
+    strcpy(paccouting_tmp.password[1], "20184317");
     //0 代表管理员，其他数字就是userid
     for (unsigned short i = 0; i < ACCOUNT_NUM; i++)
     {
