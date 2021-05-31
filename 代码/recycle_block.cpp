@@ -1,4 +1,4 @@
-#include"header.h"
+#include "header.h"
 
 //重置block
 void recycle_block(unsigned int &inode_number)
@@ -18,10 +18,10 @@ void recycle_block(unsigned int &inode_number)
             stack[i] = superBlock.special_stack[i];
         }
         stack[50] = superBlock.special_free;
-        fseek(fd, DATA_START + block_num*BLOCK_SIZE, SEEK_SET);
+        fseek(fd, DATA_START + block_num * BLOCK_SIZE, SEEK_SET);
         fwrite(stack, sizeof(stack), 1, fd);
         block_num -= 50;
-        fseek(fd, DATA_START + block_num*BLOCK_SIZE, SEEK_SET);
+        fseek(fd, DATA_START + block_num * BLOCK_SIZE, SEEK_SET);
         fread(stack, sizeof(stack), 1, fd);
         for (int i = 0; i < 50; i++)
         {

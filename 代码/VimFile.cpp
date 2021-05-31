@@ -1,6 +1,6 @@
 #include "header.h"
-//输出文件信息
-void PrintFile(inode &ifile)
+
+void VimFile(inode &ifile)
 {
     //权限检测
     if (userID == ifile.di_uid)
@@ -27,6 +27,8 @@ void PrintFile(inode &ifile)
             return;
         }
     }
+    ofstream in;
+    in.open("com.txt", ios::trunc); //ios::trunc表示在打开文件前将文件清空,由于是写入,文件不存在则创建
     int block_num = ifile.di_size / BLOCK_SIZE + 1;
     int print_line_num = 0; //16 bytes 每一行.
     //从块中读取文件
@@ -41,12 +43,7 @@ void PrintFile(inode &ifile)
             {
                 if (stack[j] == '\0')
                     break;
-                if (j % 16 == 0)
-                {
-                    printf("\n");
-                    printf("%d\t", ++print_line_num);
-                }
-                printf("%c", stack[j]);
+                in << stack[j];
             }
         }
     }
@@ -60,12 +57,7 @@ void PrintFile(inode &ifile)
             {
                 if (stack[j] == '\0')
                     break;
-                if (j % 16 == 0)
-                {
-                    printf("\n");
-                    printf("%d\t", ++print_line_num);
-                }
-                printf("%c", stack[j]);
+                in << stack[j];
             }
         }
         unsigned int f1[BLOCK_SIZE / sizeof(unsigned int)] = {0};
@@ -79,14 +71,10 @@ void PrintFile(inode &ifile)
             {
                 if (stack[j] == '\0')
                     break;
-                if (j % 16 == 0)
-                {
-                    printf("\n");
-                    printf("%d\t", ++print_line_num);
-                }
-                printf("%c", stack[j]);
+                in << stack[j];
             }
         }
     }
-    printf("\n\n\n");
+    cout << system("gnome-terminal -- vim ./com.txt")
+         << endl;
 };

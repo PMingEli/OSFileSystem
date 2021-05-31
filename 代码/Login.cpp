@@ -1,6 +1,6 @@
-#include"header.h"
+#include "header.h"
 //登录模块
-bool Login(const char* user, const char* password)
+bool Login(const char *user, const char *password)
 {
     //检测参数
     if (user == NULL || password == NULL)
@@ -13,14 +13,14 @@ bool Login(const char* user, const char* password)
         printf("用户名或密码不合法!\n");
         return false;
     }
-    
+
     //检测是否登录
     if (userID != ACCOUNT_NUM)
     {
         printf("用户已经登录，请先退出.\n");
         return false;
     }
-    
+
     //在账户文件中搜相应的账户名
     for (int i = 0; i < ACCOUNT_NUM; i++)
     {
@@ -36,16 +36,17 @@ bool Login(const char* user, const char* password)
                 memset(userName, 0, USER_NAME_LENGTH + 6);
                 if (userID == 0)
                 {
-                    strcat(userName, "superman ");
+                    strcat(userName, "superman");
+                    strcat(userName, "@");
                     strcat(userName, users.userName[i]);
-                    strcat(userName, "$");
+                    //strcat(userName, "$");
                 }
                 else
                 {
                     strcat(userName, users.userName[i]);
-                    strcat(userName, "#");
+                    //strcat(userName, "#");
                 }
-                
+
                 return true;
             }
             else
@@ -56,9 +57,8 @@ bool Login(const char* user, const char* password)
             }
         }
     }
-    
+
     //用户名未找到
     printf("登录失败，没有相应的用户.\n");
     return false;
-    
 };
