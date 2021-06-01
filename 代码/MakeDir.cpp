@@ -17,6 +17,7 @@ bool MakeDir(const char* dirname)
     }
     int new_ino = 0;
     unsigned int new_block_addr = 0;
+    //在位视图中查找空闲块
     for (; new_ino < INODE_NUM; new_ino++)
     {
         if (inode_bitmap[new_ino] == 0)
