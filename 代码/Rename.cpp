@@ -1,6 +1,7 @@
-#include"header.h"
+#include "header.h"
 //对文件或目录重命名
-void Rename(char* filename) {
+void Rename(char *filename)
+{
     printf("0=文件，1=目录，请选择:");
     int tt;
     scanf("%d", &tt);
@@ -10,8 +11,9 @@ void Rename(char* filename) {
         return;
     }
     int pos_in_directory = -1;
-    inode* tmp_file_inode = new inode;
-    do {
+    inode *tmp_file_inode = new inode;
+    do
+    {
         pos_in_directory++;
         for (; pos_in_directory < DIRECTORY_NUM; pos_in_directory++)
         {

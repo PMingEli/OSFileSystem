@@ -1,6 +1,6 @@
-#include"header.h"
+#include "header.h"
 //链接
-bool ln(char* filename)
+bool ln(char *filename)
 {
     printf("0=文件，1=目录，请选择:");
     int tt;
@@ -11,8 +11,9 @@ bool ln(char* filename)
         return false;
     }
     int pos_in_directory = -1;
-    inode* tmp_file_inode = new inode;
-    do {
+    inode *tmp_file_inode = new inode;
+    do
+    {
         pos_in_directory++;
         for (; pos_in_directory < DIRECTORY_NUM; pos_in_directory++)
         {
@@ -30,22 +31,27 @@ bool ln(char* filename)
         fseek(fd, INODE_START + tmp_file_ino * INODE_SIZE, SEEK_SET);
         fread(tmp_file_inode, sizeof(inode), 1, fd);
     } while (tmp_file_inode->di_mode == tt);
-//权限检测
+    //权限检测
     if (userID == tmp_file_inode->di_uid)
     {
-        if (!(tmp_file_inode->permission & OWN_E)) {
+        if (!(tmp_file_inode->permission & OWN_E))
+        {
             printf("没有权限.\n");
             return false;
         }
     }
-    else if (users.groupID[userID] == tmp_file_inode->di_grp) {
-        if (!(tmp_file_inode->permission & GRP_E)) {
+    else if (users.groupID[userID] == tmp_file_inode->di_grp)
+    {
+        if (!(tmp_file_inode->permission & GRP_E))
+        {
             printf("没有权限.\n");
             return false;
         }
     }
-    else {
-        if (!(tmp_file_inode->permission & ELSE_E)) {
+    else
+    {
+        if (!(tmp_file_inode->permission & ELSE_E))
+        {
             printf("没有权限.\n");
             return false;
         }
@@ -88,7 +94,8 @@ bool ln(char* filename)
                 {
                     fseek(fd, INODE_START + cur_dir.inodeID[i] * INODE_SIZE, SEEK_SET);
                     fread(&dir_inode, sizeof(inode), 1, fd);
-                    if (dir_inode.di_mode == 0)break;
+                    if (dir_inode.di_mode == 0)
+                        break;
                 }
             }
             if (i == DIRECTORY_NUM)
@@ -121,7 +128,7 @@ bool ln(char* filename)
     fwrite(&cur_dir, sizeof(directory), 1, fd);
     dir_inode.di_number++;
     tmp_file_inode->icount++;
-    fseek(fd, INODE_START + tmp_file_inode->i_ino*INODE_SIZE, SEEK_SET);
+    fseek(fd, INODE_START + tmp_file_inode->i_ino * INODE_SIZE, SEEK_SET);
     fwrite(tmp_file_inode, sizeof(inode), 1, fd);
     return true;
 }

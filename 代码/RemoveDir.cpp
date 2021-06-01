@@ -1,18 +1,19 @@
-#include"header.h"
+#include "header.h"
 //删除一个目录和目录下的所有文件
-bool RemoveDir(const char* dirname)
+bool RemoveDir(const char *dirname)
 {
     if (dirname == NULL || strlen(dirname) > FILE_NAME_LENGTH)
     {
         printf("目录不合法.\n");
         return false;
     }
-    
+
     //1. 检查目录是否存在
     int pos_in_directory = 0;
     int tmp_dir_ino;
     inode tmp_dir_inode;
-    do {
+    do
+    {
         pos_in_directory++;
         for (; pos_in_directory < DIRECTORY_NUM; pos_in_directory++)
         {
@@ -26,41 +27,47 @@ bool RemoveDir(const char* dirname)
             printf("没有找到该目录.\n");
             return false;
         }
-        
+
         // 2. 查看inode是否是文件.
         tmp_dir_ino = currentDirectory.inodeID[pos_in_directory];
         fseek(fd, INODE_START + tmp_dir_ino * INODE_SIZE, SEEK_SET);
         fread(&tmp_dir_inode, sizeof(inode), 1, fd);
         //Directory check
     } while (tmp_dir_inode.di_mode == 1);
-    
+
     //3. 权限检
     if (userID == tmp_dir_inode.di_uid)
     {
-        if (!(tmp_dir_inode.permission & OWN_E)) {
+        if (!(tmp_dir_inode.permission & OWN_E))
+        {
             printf("权限不够.\n");
             return false;
         }
     }
-    else if (users.groupID[userID] == tmp_dir_inode.di_grp) {
-        if (!(tmp_dir_inode.permission & GRP_E)) {
+    else if (users.groupID[userID] == tmp_dir_inode.di_grp)
+    {
+        if (!(tmp_dir_inode.permission & GRP_E))
+        {
             printf("权限不够.\n");
             return false;
         }
     }
-    else {
-        if (!(tmp_dir_inode.permission & ELSE_E)) {
+    else
+    {
+        if (!(tmp_dir_inode.permission & ELSE_E))
+        {
             printf("权限不够.\n");
             return false;
         }
     }
     //4. 开始删除
-    if (tmp_dir_inode.icount > 0) {
+    if (tmp_dir_inode.icount > 0)
+    {
         tmp_dir_inode.icount--;
         fseek(fd, INODE_START + tmp_dir_inode.i_ino * INODE_SIZE, SEEK_SET);
         fwrite(&tmp_dir_inode, sizeof(inode), 1, fd);
         //更新目录
-        int pos_directory_inode = currentDirectory.inodeID[0];    //"."
+        int pos_directory_inode = currentDirectory.inodeID[0]; //"."
         inode tmp_directory_inode;
         fseek(fd, INODE_START + pos_directory_inode * INODE_SIZE, SEEK_SET);
         fread(&tmp_directory_inode, sizeof(inode), 1, fd);
@@ -79,7 +86,7 @@ bool RemoveDir(const char* dirname)
             {
                 break;
             }
-            tmp_pos_directory_inode = tmp_directory.inodeID[1];        //".."
+            tmp_pos_directory_inode = tmp_directory.inodeID[1]; //".."
             fseek(fd, INODE_START + tmp_pos_directory_inode * INODE_SIZE, SEEK_SET);
             fread(&tmp_directory_inode, sizeof(inode), 1, fd);
             fseek(fd, DATA_START + tmp_directory_inode.di_addr[0] * BLOCK_SIZE, SEEK_SET);
@@ -90,7 +97,7 @@ bool RemoveDir(const char* dirname)
     directory tmp_dir;
     fseek(fd, DATA_START + tmp_dir_inode.di_addr[0] * BLOCK_SIZE, SEEK_SET);
     fread(&tmp_dir, sizeof(directory), 1, fd);
-    
+
     //查找所有的子文件目录，并删除.
     inode tmp_sub_inode;
     char tmp_sub_filename[FILE_NAME_LENGTH];
@@ -119,7 +126,7 @@ bool RemoveDir(const char* dirname)
             tmp_dir = tmp_swp;
         }
     }
-    
+
     //5.将inode赋为0.
     int tmp_fill[sizeof(inode)];
     memset(tmp_fill, 0, sizeof(inode));
@@ -133,9 +140,9 @@ bool RemoveDir(const char* dirname)
     {
         recycle_block(tmp_dir_inode.di_addr[i]);
     }
-    
+
     //7. 更新目录
-    int pos_directory_inode = currentDirectory.inodeID[0];    //"."
+    int pos_directory_inode = currentDirectory.inodeID[0]; //"."
     inode tmp_directory_inode;
     fseek(fd, INODE_START + pos_directory_inode * INODE_SIZE, SEEK_SET);
     fread(&tmp_directory_inode, sizeof(inode), 1, fd);
@@ -154,17 +161,17 @@ bool RemoveDir(const char* dirname)
         {
             break;
         }
-        tmp_pos_directory_inode = tmp_directory.inodeID[1];        //".."
+        tmp_pos_directory_inode = tmp_directory.inodeID[1]; //".."
         fseek(fd, INODE_START + tmp_pos_directory_inode * INODE_SIZE, SEEK_SET);
         fread(&tmp_directory_inode, sizeof(inode), 1, fd);
         fseek(fd, DATA_START + tmp_directory_inode.di_addr[0] * BLOCK_SIZE, SEEK_SET);
         fread(&tmp_directory, sizeof(directory), 1, fd);
     }
-    
+
     //8 更新超级块
     superBlock.s_num_finode++;
     fseek(fd, BLOCK_SIZE, SEEK_SET);
     fwrite(&superBlock, sizeof(filsys), 1, fd);
-    
+
     return true;
 };

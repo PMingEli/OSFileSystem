@@ -1,6 +1,7 @@
-#include"header.h"
+#include "header.h"
 //文件复制
-bool Copy(char* filename, inode*& currentInode) {
+bool Copy(char *filename, inode *&currentInode)
+{
     currentInode = OpenFile(filename);
     int block_num = currentInode->di_size / BLOCK_SIZE + 1;
     //读取文件
@@ -11,12 +12,14 @@ bool Copy(char* filename, inode*& currentInode) {
     {
         for (int i = 0; i < block_num; i++)
         {
-            if (currentInode->di_addr[i] == -1) break;
+            if (currentInode->di_addr[i] == -1)
+                break;
             fseek(fd, DATA_START + currentInode->di_addr[i] * BLOCK_SIZE, SEEK_SET);
             fread(stack, sizeof(stack), 1, fd);
             for (int j = 0; j < BLOCK_SIZE; j++)
             {
-                if (stack[j] == '\0') {
+                if (stack[j] == '\0')
+                {
                     str[cnt] = 0;
                     break;
                 }
@@ -24,29 +27,33 @@ bool Copy(char* filename, inode*& currentInode) {
             }
         }
     }
-    else if (block_num > NADDR - 2) {
+    else if (block_num > NADDR - 2)
+    {
         for (int i = 0; i < NADDR - 2; i++)
         {
             fseek(fd, DATA_START + currentInode->di_addr[i] * BLOCK_SIZE, SEEK_SET);
             fread(stack, sizeof(stack), 1, fd);
             for (int j = 0; j < BLOCK_SIZE; j++)
             {
-                if (stack[j] == '\0') {
+                if (stack[j] == '\0')
+                {
                     str[cnt] = 0;
                     break;
                 }
                 str[cnt++] = stack[j];
             }
         }
-        unsigned int f1[BLOCK_SIZE / sizeof(unsigned int)] = { 0 };
+        unsigned int f1[BLOCK_SIZE / sizeof(unsigned int)] = {0};
         fseek(fd, DATA_START + currentInode->di_addr[NADDR - 2] * BLOCK_SIZE, SEEK_SET);
         fread(f1, sizeof(f1), 1, fd);
-        for (int i = 0; i < block_num - (NADDR - 2); i++) {
+        for (int i = 0; i < block_num - (NADDR - 2); i++)
+        {
             fseek(fd, DATA_START + f1[i] * BLOCK_SIZE, SEEK_SET);
             fread(stack, sizeof(stack), 1, fd);
             for (int j = 0; j < BLOCK_SIZE; j++)
             {
-                if (stack[j] == '\0') {
+                if (stack[j] == '\0')
+                {
                     str[cnt] = 0;
                     break;
                 }
@@ -54,10 +61,11 @@ bool Copy(char* filename, inode*& currentInode) {
             }
         }
     }
-    
+
     int pos_in_directory = -1;
-    inode* tmp_file_inode = new inode;
-    do {
+    inode *tmp_file_inode = new inode;
+    do
+    {
         pos_in_directory++;
         for (; pos_in_directory < DIRECTORY_NUM; pos_in_directory++)
         {
@@ -75,23 +83,28 @@ bool Copy(char* filename, inode*& currentInode) {
         fseek(fd, INODE_START + tmp_file_ino * INODE_SIZE, SEEK_SET);
         fread(tmp_file_inode, sizeof(inode), 1, fd);
     } while (tmp_file_inode->di_mode == 0);
-    
+
     //权限检测
     if (userID == tmp_file_inode->di_uid)
     {
-        if (!(tmp_file_inode->permission & OWN_E)) {
+        if (!(tmp_file_inode->permission & OWN_E))
+        {
             printf("权限不够.\n");
             return false;
         }
     }
-    else if (users.groupID[userID] == tmp_file_inode->di_grp) {
-        if (!(tmp_file_inode->permission & GRP_E)) {
+    else if (users.groupID[userID] == tmp_file_inode->di_grp)
+    {
+        if (!(tmp_file_inode->permission & GRP_E))
+        {
             printf("权限不够.\n");
             return false;
         }
     }
-    else {
-        if (!(tmp_file_inode->permission & ELSE_E)) {
+    else
+    {
+        if (!(tmp_file_inode->permission & ELSE_E))
+        {
             printf("权限不够.\n");
             return false;
         }
@@ -134,7 +147,8 @@ bool Copy(char* filename, inode*& currentInode) {
                 {
                     fseek(fd, INODE_START + cur_dir.inodeID[i] * INODE_SIZE, SEEK_SET);
                     fread(&dir_inode, sizeof(inode), 1, fd);
-                    if (dir_inode.di_mode == 0)break;
+                    if (dir_inode.di_mode == 0)
+                        break;
                 }
             }
             if (i == DIRECTORY_NUM)
@@ -193,7 +207,7 @@ bool Copy(char* filename, inode*& currentInode) {
     fseek(fd, DATA_START + dir_inode.di_addr[0] * BLOCK_SIZE, SEEK_SET);
     fwrite(&cur_dir, sizeof(directory), 1, fd);
     dir_inode.di_number++;
-    fseek(fd, INODE_START + tmp_file_inode->i_ino*INODE_SIZE, SEEK_SET);
+    fseek(fd, INODE_START + tmp_file_inode->i_ino * INODE_SIZE, SEEK_SET);
     fwrite(tmp_file_inode, sizeof(inode), 1, fd);
     return true;
 }
