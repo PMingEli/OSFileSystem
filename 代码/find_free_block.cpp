@@ -1,4 +1,4 @@
-#include"header.h"
+#include "header.h"
 //寻找空闲块
 void find_free_block(unsigned int &inode_number)
 {
@@ -12,7 +12,7 @@ void find_free_block(unsigned int &inode_number)
             return;
         }
         unsigned int stack[51];
-        
+
         for (int i = 0; i < 50; i++)
         {
             stack[i] = superBlock.special_stack[i];
@@ -20,7 +20,7 @@ void find_free_block(unsigned int &inode_number)
         stack[50] = superBlock.special_free;
         fseek(fd, DATA_START + (superBlock.special_stack[0] - 50) * BLOCK_SIZE, SEEK_SET);
         fwrite(stack, sizeof(stack), 1, fd);
-        
+
         fseek(fd, DATA_START + superBlock.special_stack[0] * BLOCK_SIZE, SEEK_SET);
         fread(stack, sizeof(stack), 1, fd);
         for (int i = 0; i < 50; i++)

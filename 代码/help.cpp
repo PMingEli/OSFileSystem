@@ -1,5 +1,6 @@
-#include"header.h"
-void Help(){
+#include "header.h"
+void Help()
+{
     printf("系统当前支持指令:\n");
     printf("\t01.退出系统.........................(exit)\n");
     printf("\t02.显示帮助信息......................(help)\n");
