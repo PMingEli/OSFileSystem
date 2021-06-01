@@ -1,12 +1,7 @@
-<<<<<<< HEAD
-#include "header.h"
-void CommParser(inode *&currentInode)
-=======
 #include"header.h"
 
 //主要功能选择集合
 void CommParser(inode*& currentInode)
->>>>>>> 1908043cba3e84dd20701c109089c18e4b21c8db
 {
     char para1[11];//存储功能前缀
     char para2[1024];
