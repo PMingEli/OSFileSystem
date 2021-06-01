@@ -1,7 +1,9 @@
 #include"header.h"
+
+//主要功能选择集合
 void CommParser(inode*& currentInode)
 {
-    char para1[11];
+    char para1[11];//存储功能前缀
     char para2[1024];
     bool flag = false;
     while (true)

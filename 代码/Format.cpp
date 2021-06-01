@@ -18,13 +18,13 @@ bool Format()
     superBlock.s_size_block = BLOCK_SIZE;
     superBlock.s_num_fblock = BLOCK_NUM - 2;
     superBlock.s_num_finode = INODE_NUM - 2;
-    superBlock.special_stack[0] = 47;
+    superBlock.special_stack[0] = 48;
     for (int i = 1; i < 50; i++)
     {
         superBlock.special_stack[i] = 49 - i;
     }
     superBlock.special_free = 47;
-    //Write super block into file.
+    //写超级块进入文件
     fseek(fd, BLOCK_SIZE, SEEK_SET);
     fwrite(&superBlock, sizeof(filsys), 1, fd);
     fseek(fd, BLOCK_SIZE, SEEK_SET);
@@ -36,7 +36,7 @@ bool Format()
     memset(inode_bitmap, 0, INODE_NUM);
     inode_bitmap[0] = 1;
     inode_bitmap[1] = 1;
-    //Write bitmaps into file.
+    //写位示进入文件
     fseek(fd, 2 * BLOCK_SIZE, SEEK_SET);
     fwrite(inode_bitmap, sizeof(unsigned short) * INODE_NUM, 1, fd);
     
@@ -90,8 +90,8 @@ bool Format()
     
     //创建根目录
     inode iroot_tmp;
-    iroot_tmp.i_ino = 0;
-    iroot_tmp.di_number = 2;
+    iroot_tmp.i_ino = 0;   //根目录用掉0号块
+    iroot_tmp.di_number = 2;//目录下目录以及文件数量
     iroot_tmp.di_mode = 0;                    //0 =目录
     iroot_tmp.di_size = 0;                    //目录大小为0
     memset(iroot_tmp.di_addr, -1, sizeof(unsigned int) * NADDR);
