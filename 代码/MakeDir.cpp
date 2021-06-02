@@ -43,13 +43,22 @@ bool MakeDir(const char *dirname)
             int tmp_file_ino = currentDirectory.inodeID[i];
             fseek(fd, INODE_START + tmp_file_ino * INODE_SIZE, SEEK_SET);
             fread(tmp_file_inode, sizeof(inode), 1, fd);
+            // if (tmp_file_inode->di_mode == 1)
+            //     continue;
+            // else
+            // {
+            //     printf("File creation error: Directory name '%s' has been used.\n", currentDirectory.fileName[i]);
+            //     return false;
+            // }
             if (tmp_file_inode->di_mode == 1)
-                continue;
-            else
             {
-                printf("File creation error: Directory name '%s' has been used.\n", currentDirectory.fileName[i]);
-                return false;
+                printf("mkdir: 无法创建目录 '%s' : 文件已存在\n", currentDirectory.fileName[i]);
             }
+            else if (tmp_file_inode->di_mode == 0)
+            {
+                printf("mkdir: 无法创建目录 '%s' : 目录已存在\n", currentDirectory.fileName[i]);
+            }
+            return false;
         }
     }
 
