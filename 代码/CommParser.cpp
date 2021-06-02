@@ -85,12 +85,19 @@ void CommParser(inode *&currentInode)
             printf("系统信息:\n总共的block:%d\n空闲block:%d\n总inode:%d\n剩余inode:%d\n\n", superBlock.s_num_block, superBlock.s_num_fblock, superBlock.s_num_inode, superBlock.s_num_finode);
             for (int i = 0; i < 50; i++)
             {
-                if (i > superBlock.special_free)
-                    printf("-1\t");
+                if (i == 0)
+                {
+                    printf("%d\t", superBlock.special_free);
+                }
                 else
-                    printf("%d\t", superBlock.special_stack[i]);
-                if (i % 10 == 9)
-                    printf("\n");
+                {
+                    if (i > superBlock.special_free)
+                        printf("-1\t");
+                    else
+                        printf("%d\t", superBlock.special_stack[i]);
+                    if (i % 10 == 9)
+                        printf("\n");
+                }
             }
             printf("\n\n");
         }

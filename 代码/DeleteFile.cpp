@@ -156,7 +156,8 @@ bool DeleteFile(const char *filename)
 
     //6.更新超级块
     superBlock.s_num_finode++;
-    superBlock.special_stack[0]++;
+    superBlock.special_free++;
+    superBlock.s_num_fblock++;
     fseek(fd, BLOCK_SIZE, SEEK_SET);
     fwrite(&superBlock, sizeof(filsys), 1, fd);
 

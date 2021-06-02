@@ -63,6 +63,7 @@ bool CreateFile(const char *filename)
     //创建新的inode
     inode ifile_tmp;
     ifile_tmp.i_ino = new_ino;
+    find_free_block(ifile_tmp.i_ino);
     ifile_tmp.di_number = 1;
     ifile_tmp.di_mode = 1; //1 表示文件
     ifile_tmp.di_size = 0; //新文件大小为0
@@ -126,7 +127,6 @@ bool CreateFile(const char *filename)
 
     //更新超级块
     superBlock.s_num_finode--;
-    superBlock.special_stack[0]--;
     fseek(fd, BLOCK_SIZE, SEEK_SET);
     fwrite(&superBlock, sizeof(filsys), 1, fd);
 
