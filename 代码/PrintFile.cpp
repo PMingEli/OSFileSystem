@@ -2,6 +2,10 @@
 //输出文件信息
 void PrintFile(inode &ifile)
 {
+    if (&ifile == NULL)
+    {
+        return;
+    }
     //权限检测
     if (userID == ifile.di_uid)
     {
@@ -88,5 +92,5 @@ void PrintFile(inode &ifile)
             }
         }
     }
-    printf("\n\n\n");
+    printf("\n");
 };

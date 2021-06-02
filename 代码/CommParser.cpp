@@ -1,9 +1,9 @@
-#include"header.h"
+#include "header.h"
 
 //主要功能选择集合
-void CommParser(inode*& currentInode)
+void CommParser(inode *&currentInode)
 {
-    char para1[11];//存储功能前缀
+    char para1[11]; //存储功能前缀
     char para2[1024];
     bool flag = false;
     int n = 0;
@@ -122,61 +122,205 @@ void CommParser(inode*& currentInode)
             currentInode = OpenFile(para2);
         }
         //写文件
-        else if (strcmp("insert", para1) == 0 && flag)
+        else if (strcmp("insert", para1) == 0)
         {
-            //scanf("%s", para2);
-            strcpy(para2, v[1].c_str());
-            para2[1023] = 0;
-            Write(*currentInode, para2);
+            if (flag)
+            {
+                for (int i = 1; i < n - 1; i++)
+                {
+                    strcat(para2, v[i].c_str());
+                    strcat(para2, " ");
+                }
+                strcat(para2, v[n - 1].c_str());
+                para2[1023] = 0;
+                Write(*currentInode, para2);
+            }
+            else
+            {
+                if (n < 2)
+                {
+                    cout << "insert : 在insert后缺少了要操作的目标文件" << endl;
+                    cout << "请尝试执行“help”来获取更多信息" << endl;
+                }
+                else
+                {
+                    currentInode = OpenMutipleFile(v[1]);
+                    for (int i = 1; i < n - 1; i++)
+                    {
+                        strcat(para2, v[i].c_str());
+                        strcat(para2, " ");
+                    }
+                    strcat(para2, v[n - 1].c_str());
+                    para2[1023] = 0;
+                    Write(*currentInode, para2);
+                }
+            }
         }
         //读文件
-        else if (strcmp("cat", para1) == 0 && flag)
+        else if (strcmp("cat", para1) == 0)
         {
-            PrintFile(*currentInode);
+            flag = false;
+            if (n < 2)
+            {
+                cout << "cat : 在cat后缺少了要操作的目标文件" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n > 2)
+            {
+                cout << "cat : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else
+            {
+                currentInode = OpenMutipleFile(v[1]);
+                PrintFile(*currentInode);
+            }
         }
         //打开一个目录
         else if (strcmp("cd", para1) == 0)
         {
             flag = false;
-            //scanf("%s", para2);
-            // strcpy(para2, v[1].c_str());
-            // para2[1023] = 0;
-            // OpenDir(para2);
-            OpenMutipleDir(v[1]);
+            if (n == 2)
+            {
+                flag = false;
+                OpenMutipleDir(v[1]);
+            }
+            else if (n > 2)
+            {
+                cout << "cd : 参数过多" << endl;
+            }
         }
         //创建目录
         else if (strcmp("mkdir", para1) == 0)
         {
             flag = false;
-            //scanf("%s", para2);
-            strcpy(para2, v[1].c_str());
-            para2[1023] = 0; //security protection
-            MakeDir(para2);
+            if (n < 2)
+            {
+                cout << "mkdir : 缺少参数" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n > 2)
+            {
+                cout << "mkdir : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else
+            {
+                strcpy(para2, v[1].c_str());
+                para2[1023] = 0; //security protection
+                MakeDir(para2);
+            }
         }
         //删除目录
         else if (strcmp("rmdir", para1) == 0)
         {
             flag = false;
-            //scanf("%s", para2);
-            strcpy(para2, v[1].c_str());
-            para2[1023] = 0; //security protection
-
-            RemoveDir(para2);
+            if (n < 2)
+            {
+                cout << "rkdir : 缺少参数" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n > 2)
+            {
+                cout << "rkdir : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else
+            {
+                strcpy(para2, v[1].c_str());
+                para2[1023] = 0; //security protection
+                RemoveDir(para2);
+            }
         }
         //登出系统
         else if (strcmp("logout", para1) == 0)
         {
             flag = false;
-            Logout();
-            char tmp_userName[USER_NAME_LENGTH], tmp_userPassword[USER_PASSWORD_LENGTH * 5];
-            do
+            if (n == 1)
             {
-                memset(tmp_userName, 0, USER_NAME_LENGTH);
-                memset(tmp_userPassword, 0, USER_PASSWORD_LENGTH * 5);
-                printf("用户登录\n\n");
-                printf("用户名:\t");
-                scanf("%s", tmp_userName);
-                printf("密码:\t");
+                Logout();
+                char tmp_userName[USER_NAME_LENGTH], tmp_userPassword[USER_PASSWORD_LENGTH * 5];
+                do
+                {
+                    memset(tmp_userName, 0, USER_NAME_LENGTH);
+                    memset(tmp_userPassword, 0, USER_PASSWORD_LENGTH * 5);
+                    printf("用户登录\n\n");
+                    printf("用户名:\t");
+                    scanf("%s", tmp_userName);
+                    printf("密码:\t");
+                    char c;
+                    scanf("%c", &c);
+                    int i = 0;
+                    while (1)
+                    {
+                        char ch;
+                        ch = getch();
+                        if (ch == '\b')
+                        {
+                            if (i != 0)
+                            {
+                                printf("\b \b");
+                                i--;
+                            }
+                            else
+                            {
+                                tmp_userPassword[i] = '\0';
+                            }
+                        }
+                        else if (ch == '\r')
+                        {
+                            tmp_userPassword[i] = '\0';
+                            printf("\n\n");
+                            break;
+                        }
+                        else
+                        {
+                            putchar('*');
+                            tmp_userPassword[i++] = ch;
+                        }
+                    }
+                } while (Login(tmp_userName, tmp_userPassword) != true);
+
+                inode *currentInode = new inode;
+            }
+            else
+            {
+                cout << "logout : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+        }
+        else if (strcmp("ln", para1) == 0)
+        {
+            flag = false;
+            if (n < 2)
+            {
+                cout << "ln : 缺少参数" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n > 2)
+            {
+                cout << "ln : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else
+            {
+                strcpy(para2, v[1].c_str());
+                para2[1023] = 0; //security protection
+                ln(para2);
+            }
+        }
+        //登录
+        else if (strcmp("su", para1) == 0)
+        {
+            flag = false;
+            if (n == 1)
+            {
+                Logout();
+                char para3[USER_PASSWORD_LENGTH * 5];
+                memset(para3, 0, USER_PASSWORD_LENGTH + 1);
+                scanf("%s", para2);
+                para2[1023] = 0;
+                printf("密码: ");
                 char c;
                 scanf("%c", &c);
                 int i = 0;
@@ -191,118 +335,104 @@ void CommParser(inode*& currentInode)
                             printf("\b \b");
                             i--;
                         }
-                        else
-                        {
-                            tmp_userPassword[i] = '\0';
-                        }
                     }
                     else if (ch == '\r')
                     {
-                        tmp_userPassword[i] = '\0';
+                        para3[i] = '\0';
                         printf("\n\n");
                         break;
                     }
                     else
                     {
                         putchar('*');
-                        tmp_userPassword[i++] = ch;
+                        para3[i++] = ch;
                     }
                 }
-            } while (Login(tmp_userName, tmp_userPassword) != true);
-
-            inode *currentInode = new inode;
-        }
-        else if (strcmp("ln", para1) == 0)
-        {
-            flag = false;
-            scanf("%s", para2);
-            para2[1023] = 0;
-            ln(para2);
-        }
-        //登录
-        else if (strcmp("su", para1) == 0)
-        {
-            Logout();
-            flag = false;
-            char para3[USER_PASSWORD_LENGTH * 5];
-            memset(para3, 0, USER_PASSWORD_LENGTH + 1);
-            scanf("%s", para2);
-            para2[1023] = 0;
-            printf("密码: ");
-            char c;
-            scanf("%c", &c);
-            int i = 0;
-            while (1)
-            {
-                char ch;
-                ch = getch();
-                if (ch == '\b')
-                {
-                    if (i != 0)
-                    {
-                        printf("\b \b");
-                        i--;
-                    }
-                }
-                else if (ch == '\r')
-                {
-                    para3[i] = '\0';
-                    printf("\n\n");
-                    break;
-                }
-                else
-                {
-                    putchar('*');
-                    para3[i++] = ch;
-                }
+                para3[USER_PASSWORD_LENGTH] = 0; //security protection
+                Login(para2, para3);
             }
-            para3[USER_PASSWORD_LENGTH] = 0; //security protection
-
-            Login(para2, para3);
+            else
+            {
+                cout << "su : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
         }
         else if (strcmp("Muser", para1) == 0)
         {
             flag = false;
-            User_management();
+            if (n == 1)
+            {
+                User_management();
+            }
+            else
+            {
+                cout << "Muser : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
         }
         //退出系统
         else if (strcmp("exit", para1) == 0)
         {
             flag = false;
-            break;
-        }
-        else if ((strcmp("rm-rf/*", para1) == 0))
-        {
-            if (userID == 0)
+            if (n == 1)
             {
-                printf("您真的要删除跑路吗？[y/n]");
-                char label;
-                cin >> label;
-                while (label != 'n' && label != 'N')
+                break;
+            }
+            else
+            {
+                cout << "exit : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+        }
+        else if ((strcmp("rm-rf", para1) == 0))
+        {
+            flag = false;
+            if (n == 1)
+            {
+                if (userID == 0)
                 {
-                    if (label == 'y' || label == 'Y')
+                    printf("您真的要删除跑路吗？[y/n]");
+                    char label;
+                    cin >> label;
+                    while (label != 'n' && label != 'N')
                     {
-                        Format();
-                        Mount();
-                        break;
+                        if (label == 'y' || label == 'Y')
+                        {
+                            Format();
+                            Mount();
+                            break;
+                        }
+                        else
+                        {
+                            printf("输入错误，请重新输入[y/n]");
+                            cin >> label;
+                        }
                     }
-                    else
-                    {
-                        printf("输入错误，请重新输入[y/n]");
-                        cin >> label;
-                    }
+                }
+                else
+                {
+                    printf("您的权限不够，请联系管理员操作！");
                 }
             }
             else
             {
-                printf("您的权限不够，请联系管理员操作！");
+                cout << "rm-rf : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
             }
         }
         //help
         else
         {
             flag = false;
-            Help();
+            if (n == 1)
+            {
+                Help();
+            }
+            else
+            {
+                cout << "help : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
         }
     }
 };
