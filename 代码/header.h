@@ -165,7 +165,7 @@ void Logout();
 bool CreateFile(string route);
 
 //删除文件
-bool DeleteFile(const char *filename);
+bool DeleteFile(string route);
 
 //重置block
 void recycle_block(unsigned int &inode_number);

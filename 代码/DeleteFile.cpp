@@ -1,7 +1,33 @@
 #include "header.h"
 //删除文件
-bool DeleteFile(const char *filename)
+bool DeleteFile(string route)
 {
+    vector<string> direct;
+    direct = split(route, "/");
+    int n = direct.size();
+    if (strcmp(direct[0].c_str(), "root") == 0)
+    {
+        while (dir_pointer > 1)
+        {
+            OpenDir("..");
+        }
+        for (int i = 1; i < n - 1; i++)
+        {
+            OpenDir(direct[i].c_str());
+        }
+    }
+    else
+    {
+        for (int i = 0; i < n - 1; i++)
+        {
+            OpenDir(direct[i].c_str());
+        }
+    }
+
+    char *filename;
+
+    strcpy(filename, direct[n - 1].c_str());
+
     //文件名合法性检测
     if (filename == NULL || strlen(filename) > FILE_NAME_LENGTH)
     {
