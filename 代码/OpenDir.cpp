@@ -44,7 +44,7 @@ bool OpenDir(const char *dirname)
             if (tmp_dir_inode.permission & GRP_E != GRP_E)
             {
                 printf("权限不够.\n");
-                return NULL;
+                return false;
             }
         }
         else
@@ -52,7 +52,7 @@ bool OpenDir(const char *dirname)
             if (tmp_dir_inode.permission & ELSE_E != ELSE_E)
             {
                 printf("权限不够.\n");
-                return NULL;
+                return false;
             }
         }
         //3. 更新当前目录.
@@ -84,5 +84,6 @@ bool OpenDir(const char *dirname)
     else
     {
         printf("cd: %s: 不是目录\n", dirname);
+        return false;
     }
-};
+}

@@ -65,8 +65,8 @@ void User_management()
                     else
                     {
                         printf("插入失败!\n");
-                        strcpy(users.userName[i], 0);
-                        strcpy(users.password[i], 0);
+                        strcpy(users.userName[i], "\0");
+                        strcpy(users.password[i], "\0");
                     }
                     break;
                 }

@@ -105,7 +105,6 @@ void CommParser(inode *&currentInode)
         else if (strcmp("create", para1) == 0)
         {
             flag = false;
-            //scanf("%s", para2);
             strcpy(para2, v[1].c_str());
             para2[1023] = 0;
             CreateFile(para2);
@@ -123,10 +122,20 @@ void CommParser(inode *&currentInode)
         else if (strcmp("open", para1) == 0)
         {
             flag = true;
-            //scanf("%s", para2);
-            strcpy(para2, v[1].c_str());
-            para2[1023] = 0;
-            currentInode = OpenFile(para2);
+            if (n < 2)
+            {
+                cout << "open : 在open后缺少了要操作的目标文件" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n > 2)
+            {
+                cout << "open : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else
+            {
+                currentInode = OpenMutipleFile(v[1]);
+            }
         }
         //写文件
         else if (strcmp("insert", para1) == 0)
@@ -138,9 +147,12 @@ void CommParser(inode *&currentInode)
                     strcat(para2, v[i].c_str());
                     strcat(para2, " ");
                 }
-                strcat(para2, v[n - 1].c_str());
-                para2[1023] = 0;
-                Write(*currentInode, para2);
+                if (n > 1)
+                {
+                    strcat(para2, v[n - 1].c_str());
+                    para2[1023] = 0;
+                    Write(*currentInode, para2);
+                }
             }
             else
             {
@@ -152,35 +164,67 @@ void CommParser(inode *&currentInode)
                 else
                 {
                     currentInode = OpenMutipleFile(v[1]);
-                    for (int i = 1; i < n - 1; i++)
+                    for (int i = 2; i < n - 1; i++)
                     {
                         strcat(para2, v[i].c_str());
                         strcat(para2, " ");
                     }
-                    strcat(para2, v[n - 1].c_str());
-                    para2[1023] = 0;
-                    Write(*currentInode, para2);
+                    if (n > 2)
+                    {
+                        strcat(para2, v[n - 1].c_str());
+                        para2[1023] = 0;
+                        Write(*currentInode, para2);
+                    }
                 }
             }
         }
         //读文件
         else if (strcmp("cat", para1) == 0)
         {
-            flag = false;
-            if (n < 2)
+            if (flag)
             {
-                cout << "cat : 在cat后缺少了要操作的目标文件" << endl;
-                cout << "请尝试执行“help”来获取更多信息" << endl;
-            }
-            else if (n > 2)
-            {
-                cout << "cat : 参数过多" << endl;
-                cout << "请尝试执行“help”来获取更多信息" << endl;
+                if (n == 1)
+                {
+                    PrintFile(*currentInode);
+                }
+                else
+                {
+                    flag = false;
+                    if (n < 2)
+                    {
+                        cout << "cat : 在cat后缺少了要操作的目标文件" << endl;
+                        cout << "请尝试执行“help”来获取更多信息" << endl;
+                    }
+                    else if (n > 2)
+                    {
+                        cout << "cat : 参数过多" << endl;
+                        cout << "请尝试执行“help”来获取更多信息" << endl;
+                    }
+                    else
+                    {
+                        currentInode = OpenMutipleFile(v[1]);
+                        PrintFile(*currentInode);
+                    }
+                }
             }
             else
             {
-                currentInode = OpenMutipleFile(v[1]);
-                PrintFile(*currentInode);
+                flag = false;
+                if (n < 2)
+                {
+                    cout << "cat : 在cat后缺少了要操作的目标文件" << endl;
+                    cout << "请尝试执行“help”来获取更多信息" << endl;
+                }
+                else if (n > 2)
+                {
+                    cout << "cat : 参数过多" << endl;
+                    cout << "请尝试执行“help”来获取更多信息" << endl;
+                }
+                else
+                {
+                    currentInode = OpenMutipleFile(v[1]);
+                    PrintFile(*currentInode);
+                }
             }
         }
         //打开一个目录
@@ -200,27 +244,66 @@ void CommParser(inode *&currentInode)
         //创建目录
         else if (strcmp("mkdir", para1) == 0)
         {
-            flag = false;
-            if (n < 2)
-            {
-                cout << "mkdir : 缺少参数" << endl;
-                cout << "请尝试执行“help”来获取更多信息" << endl;
-            }
-            else if (n > 2)
+            if (n > 2)
             {
                 cout << "mkdir : 参数过多" << endl;
                 cout << "请尝试执行“help”来获取更多信息" << endl;
             }
             else
             {
-                strcpy(para2, v[1].c_str());
-                para2[1023] = 0; //security protection
-                MakeDir(para2);
+                vector<string> mul_dir = split(v.at(1), "/");
+                flag = false;
+                if (mul_dir.size() < 1)
+                    cout << "mkdir: 缺少操作数" << endl
+                         << "请尝试执行help来获取更多信息" << endl;
+                else
+                {
+                    for (int i = 0; i < mul_dir.size(); i++)
+                    {
+                        strcpy(para2, mul_dir.at(i).c_str());
+                        para2[1023] = 0; //security protection
+                        MakeDir(para2);
+                        OpenDir(para2);
+                    }
+                    for (int i = 0; i < mul_dir.size(); i++)
+                    {
+                        OpenDir("..");
+                    }
+                }
             }
         }
         //删除目录
         else if (strcmp("rmdir", para1) == 0)
         {
+            if (v.at(1).c_str()[0] == '-')
+            {
+                if (v.at(1).c_str()[0] == 'p')
+                {
+                }
+            }
+            vector<string> mul_dir = split(v.at(1), "/");
+            flag = false;
+            if (mul_dir.size() < 1)
+                cout << "mkdir: 缺少操作数" << endl
+                     << "请尝试执行 \"help \" 来获取更多信息。";
+            else
+            {
+                // for (int i = 0; i < mul_dir.size(); i++)
+                // {
+                //     strcpy(para2, mul_dir.at(i).c_str());
+                //     para2[1023] = 0; //security protection
+                //     MakeDir(para2);
+                //     OpenDir(para2);
+                // }
+                OpenMutipleDir(v.at(1));
+                for (int i = mul_dir.size() - 1; i >= 0; i--)
+                {
+                    strcpy(para2, mul_dir.at(i).c_str());
+                    para2[1023] = 0; //security protection
+                    RemoveDir(para2);
+                    OpenDir("..");
+                }
+            }
             flag = false;
             if (n < 2)
             {
