@@ -39,7 +39,7 @@ void Chmod(char *filename)
     printf("请输入 0&1 串给予权限\n");
     printf("格式: rwerwerwe\n");
     char str[10];
-    scanf("%s", &str);
+    scanf("%s", str);
     if (userID == tmp_file_inode->di_uid)
     {
         if (!(tmp_file_inode->permission & OWN_E))

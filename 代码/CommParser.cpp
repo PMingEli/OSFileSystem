@@ -1,9 +1,9 @@
-#include"header.h"
+#include "header.h"
 
 //主要功能选择集合
-void CommParser(inode*& currentInode)
+void CommParser(inode *&currentInode)
 {
-    char para1[11];//存储功能前缀
+    char para1[11]; //存储功能前缀
     char para2[1024];
     bool flag = false;
     int n = 0;
@@ -147,11 +147,25 @@ void CommParser(inode*& currentInode)
         //创建目录
         else if (strcmp("mkdir", para1) == 0)
         {
+            vector<string> mul_dir = split(v.at(1), "/");
             flag = false;
-            //scanf("%s", para2);
-            strcpy(para2, v[1].c_str());
-            para2[1023] = 0; //security protection
-            MakeDir(para2);
+            if (mul_dir.size() < 1)
+                cout << "mkdir: 缺少操作数" << endl
+                     << "请尝试执行 \" mkdir-- help \" 来获取更多信息。";
+            else
+            {
+                for (int i = 0; i < mul_dir.size(); i++)
+                {
+                    strcpy(para2, mul_dir.at(i).c_str());
+                    para2[1023] = 0; //security protection
+                    MakeDir(para2);
+                    OpenDir(para2);
+                }
+                for (int i = 0; i < mul_dir.size(); i++)
+                {
+                    OpenDir("..");
+                }
+            }
         }
         //删除目录
         else if (strcmp("rmdir", para1) == 0)

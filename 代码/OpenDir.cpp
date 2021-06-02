@@ -85,4 +85,4 @@ bool OpenDir(const char *dirname)
     {
         printf("cd: %s: 不是目录\n", dirname);
     }
-};
+}
