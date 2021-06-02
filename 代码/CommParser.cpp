@@ -155,7 +155,8 @@ void CommParser(inode *&currentInode)
         else if (strcmp("create", para1) == 0)
         {
             flag = false;
-            for(int i=1;i<v.size();i++){
+            for (int i = 1; i < n; i++)
+            {
                 CreateFile(v[i]);
             }
         }
@@ -163,7 +164,8 @@ void CommParser(inode *&currentInode)
         else if (strcmp("rm", para1) == 0)
         {
             flag = false;
-            for(int i=1;i<v.size();i++){
+            for (int i = 1; i < n; i++)
+            {
                 DeleteFile(v[i]);
             }
         }
