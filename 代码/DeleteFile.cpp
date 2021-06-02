@@ -17,7 +17,6 @@ bool DeleteFile(string route)
         {
             OpenDir(direct[i].c_str());
         }
-        strcpy(filename, direct[n - 1].c_str());
     }
     else
     {
@@ -25,8 +24,9 @@ bool DeleteFile(string route)
         {
             OpenDir(direct[i].c_str());
         }
-        strcpy(filename, direct[n - 1].c_str());
     }
+
+    strcpy(filename, direct[n - 1].c_str());
 
     //文件名合法性检测
     if (filename == NULL || strlen(filename) > FILE_NAME_LENGTH)

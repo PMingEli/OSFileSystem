@@ -560,27 +560,29 @@ void CommParser(inode *&currentInode)
             {
                 if (userID == 0)
                 {
-                    printf("您真的要删除跑路吗？[y/n]");
-                    char label;
-                    cin >> label;
-                    while (label != 'n' && label != 'N')
-                    {
-                        if (label == 'y' || label == 'Y')
-                        {
-                            Format();
-                            Mount();
-                            break;
-                        }
-                        else
-                        {
-                            printf("输入错误，请重新输入[y/n]");
-                            cin >> label;
-                        }
-                    }
+                    Format();
+                    Mount();
+                    // printf("您真的要删除跑路吗？[y/n]\n");
+                    // char label;
+                    // cin >> label;
+                    // while (label != 'n' && label != 'N')
+                    // {
+                    //     if (label == 'y' || label == 'Y')
+                    //     {
+                    //         Format();
+                    //         Mount();
+                    //         break;
+                    //     }
+                    //     else
+                    //     {
+                    //         printf("输入错误，请重新输入[y/n]\n");
+                    //         cin >> label;
+                    //     }
+                    // }
                 }
                 else
                 {
-                    printf("您的权限不够，请联系管理员操作！");
+                    printf("您的权限不够，请联系管理员操作！\n");
                 }
             }
             else
