@@ -2,6 +2,10 @@
 //在文件尾添加数据
 int Write(inode &ifile, const char *content)
 {
+    if (&ifile == NULL)
+    {
+        return -1;
+    }
     if (content == NULL)
     {
         printf("不合法的文件名.\n");

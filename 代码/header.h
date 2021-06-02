@@ -179,6 +179,9 @@ void Printsign();
 //目录多层访问
 void OpenMutipleDir(string route);
 
+//文件多层访问
+inode *OpenMutipleFile(string route);
+
 //登录模块
 bool Login(const char *user, const char *password);
 
