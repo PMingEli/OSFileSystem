@@ -4,7 +4,7 @@ void User_management()
 {
     if (userID != 0)
     {
-        printf("只有申屠鹏会才可以管理用户!\n");
+        printf("只有root才可以管理用户!\n");
         return;
     }
     printf("欢迎来到用户管理!\n");

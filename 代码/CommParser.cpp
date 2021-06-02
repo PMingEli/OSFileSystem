@@ -92,6 +92,7 @@ void CommParser(inode*& currentInode)
                 if (i % 10 == 9)
                     printf("\n");
             }
+            printf("%d\t", superBlock.special_stack[50]);
             printf("\n\n");
         }
         //创建文件

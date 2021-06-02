@@ -18,7 +18,7 @@ bool Format()
     superBlock.s_size_block = BLOCK_SIZE;
     superBlock.s_num_fblock = BLOCK_NUM - 2;
     superBlock.s_num_finode = INODE_NUM - 2;
-    superBlock.special_stack[0] = 48;
+    superBlock.special_stack[0] = 99;
     for (int i = 1; i < 50; i++)
     {
         superBlock.special_stack[i] = 49 - i;
