@@ -162,7 +162,7 @@ bool Mount();
 void Logout();
 
 //根据文件名创建文件
-bool CreateFile(const char *filename);
+bool CreateFile(string route);
 
 //删除文件
 bool DeleteFile(const char *filename);
