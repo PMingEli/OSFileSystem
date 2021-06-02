@@ -95,7 +95,6 @@ int Write(inode &ifile, const char *content)
     {
         // find_free_block(block_num);
         ifile.di_addr[0] = block_num;
-        cout<<"ssss"<<endl;
         // fseek(fd, DATA_START + block_num * BLOCK_SIZE, SEEK_SET);
         fseek(fd, DATA_START + block_num * BLOCK_SIZE + ifile.di_size % BLOCK_SIZE, SEEK_SET);
     }
