@@ -1,5 +1,5 @@
 #include "header.h"
-//根据文件名创建文件
+//根据路径和文件名创建文件
 bool CreateFile(string route)
 {
 
