@@ -46,60 +46,110 @@ void CommParser(inode *&currentInode)
             para2[1023] = 0; //安全保护
             Rename(para2);
         }
+        //显示当前目录
         else if (strcmp("pwd", para1) == 0)
-        { //显示当前目录
+        {
             flag = false;
             Ab_dir();
         }
+        //修改密码
         else if (strcmp("passwd", para1) == 0)
         {
             flag = false;
             Passwd();
         }
+        //用户权限
         else if (strcmp("chmod", para1) == 0)
-        { //用户权限
+        {
             flag = false;
-            strcpy(para2, v[1].c_str());
-            //scanf("%s", para2);
-            para2[1023] = 0;
-            Chmod(para2);
+            if (n == 1)
+            {
+                cout << "chmod : 在chgrp后缺少了要操作的目标文件" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n > 2)
+            {
+                cout << "chmod : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else
+            {
+                strcpy(para2, v[1].c_str());
+                para2[1023] = 0;
+                Chmod(para2);
+            }
         }
+        //更改用户权限
         else if (strcmp("chown", para1) == 0)
-        { //更改用户权限
+        {
             flag = false;
-            //scanf("%s", para2);
-            strcpy(para2, v[1].c_str());
-            para2[1023] = 0;
-            Chown(para2);
+            if (n == 1)
+            {
+                cout << "chown : 在chgrp后缺少了要操作的目标文件" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n > 2)
+            {
+                cout << "chown : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else
+            {
+                strcpy(para2, v[1].c_str());
+                para2[1023] = 0;
+                Chown(para2);
+            }
         }
+        //更改所属组
         else if (strcmp("chgrp", para1) == 0)
-        { //更改所属组
+        {
             flag = false;
-            //scanf("%s", para2);
-            strcpy(para2, v[1].c_str());
-            para2[1023] = 0;
-            Chgrp(para2);
+            if (n == 1)
+            {
+                cout << "chgrp : 在chgrp后缺少了要操作的目标文件" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n > 2)
+            {
+                cout << "chgrp : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else
+            {
+                strcpy(para2, v[1].c_str());
+                para2[1023] = 0;
+                Chgrp(para2);
+            }
         }
+        //显示信息
         else if (strcmp("info", para1) == 0)
         {
-            printf("系统信息:\n总共的block:%d\n空闲block:%d\n总inode:%d\n剩余inode:%d\n\n", superBlock.s_num_block, superBlock.s_num_fblock, superBlock.s_num_inode, superBlock.s_num_finode);
-            for (int i = 0; i < 50; i++)
+            if (n == 1)
             {
-                if (i == 0)
+                printf("系统信息:\n总共的block:%d\n空闲block:%d\n总inode:%d\n剩余inode:%d\n\n", superBlock.s_num_block, superBlock.s_num_fblock, superBlock.s_num_inode, superBlock.s_num_finode);
+                for (int i = 0; i < 50; i++)
                 {
-                    printf("%d\t", superBlock.special_free);
-                }
-                else
-                {
-                    if (i > superBlock.special_free)
-                        printf("-1\t");
+                    if (i == 0)
+                    {
+                        printf("%d\t", superBlock.special_free);
+                    }
                     else
-                        printf("%d\t", superBlock.special_stack[i]);
-                    if (i % 10 == 9)
-                        printf("\n");
+                    {
+                        if (i > superBlock.special_free)
+                            printf("-1\t");
+                        else
+                            printf("%d\t", superBlock.special_stack[i]);
+                        if (i % 10 == 9)
+                            printf("\n");
+                    }
                 }
+                printf("\n\n");
             }
-            printf("\n\n");
+            else
+            {
+                cout << "info : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
         }
         //创建文件
         else if (strcmp("create", para1) == 0)
@@ -244,31 +294,23 @@ void CommParser(inode *&currentInode)
         //创建目录
         else if (strcmp("mkdir", para1) == 0)
         {
-            if (n > 2)
-            {
-                cout << "mkdir : 参数过多" << endl;
-                cout << "请尝试执行“help”来获取更多信息" << endl;
-            }
+            vector<string> mul_dir = split(v.at(1), "/");
+            flag = false;
+            if (mul_dir.size() < 1)
+                cout << "mkdir: 缺少操作数" << endl
+                     << "请尝试执行help来获取更多信息" << endl;
             else
             {
-                vector<string> mul_dir = split(v.at(1), "/");
-                flag = false;
-                if (mul_dir.size() < 1)
-                    cout << "mkdir: 缺少操作数" << endl
-                         << "请尝试执行help来获取更多信息" << endl;
-                else
+                for (int i = 0; i < mul_dir.size(); i++)
                 {
-                    for (int i = 0; i < mul_dir.size(); i++)
-                    {
-                        strcpy(para2, mul_dir.at(i).c_str());
-                        para2[1023] = 0; //security protection
-                        MakeDir(para2);
-                        OpenDir(para2);
-                    }
-                    for (int i = 0; i < mul_dir.size(); i++)
-                    {
-                        OpenDir("..");
-                    }
+                    strcpy(para2, mul_dir.at(i).c_str());
+                    para2[1023] = 0; //security protection
+                    MakeDir(para2);
+                    OpenDir(para2);
+                }
+                for (int i = 0; i < mul_dir.size(); i++)
+                {
+                    OpenDir("..");
                 }
             }
         }
@@ -285,7 +327,7 @@ void CommParser(inode *&currentInode)
             flag = false;
             if (mul_dir.size() < 1)
                 cout << "mkdir: 缺少操作数" << endl
-                     << "请尝试执行 \"help \" 来获取更多信息。";
+                     << "请尝试执行help来获取更多信息";
             else
             {
                 // for (int i = 0; i < mul_dir.size(); i++)
@@ -303,23 +345,6 @@ void CommParser(inode *&currentInode)
                     RemoveDir(para2);
                     OpenDir("..");
                 }
-            }
-            flag = false;
-            if (n < 2)
-            {
-                cout << "rkdir : 缺少参数" << endl;
-                cout << "请尝试执行“help”来获取更多信息" << endl;
-            }
-            else if (n > 2)
-            {
-                cout << "rkdir : 参数过多" << endl;
-                cout << "请尝试执行“help”来获取更多信息" << endl;
-            }
-            else
-            {
-                strcpy(para2, v[1].c_str());
-                para2[1023] = 0; //security protection
-                RemoveDir(para2);
             }
         }
         //登出系统
