@@ -131,9 +131,12 @@ void CommParser(inode *&currentInode)
                     strcat(para2, v[i].c_str());
                     strcat(para2, " ");
                 }
-                strcat(para2, v[n - 1].c_str());
-                para2[1023] = 0;
-                Write(*currentInode, para2);
+                if (n > 1)
+                {
+                    strcat(para2, v[n - 1].c_str());
+                    para2[1023] = 0;
+                    Write(*currentInode, para2);
+                }
             }
             else
             {
@@ -142,10 +145,10 @@ void CommParser(inode *&currentInode)
                     cout << "insert : 在insert后缺少了要操作的目标文件" << endl;
                     cout << "请尝试执行“help”来获取更多信息" << endl;
                 }
-                else
+                else if (n > 2)
                 {
                     currentInode = OpenMutipleFile(v[1]);
-                    for (int i = 1; i < n - 1; i++)
+                    for (int i = 2; i < n - 1; i++)
                     {
                         strcat(para2, v[i].c_str());
                         strcat(para2, " ");
