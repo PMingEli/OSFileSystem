@@ -2,7 +2,6 @@
 //根据路径和文件名创建文件
 bool CreateFile(string route)
 {
-
     vector<string> direct;
     direct = split(route, "/");
     int n = direct.size();
@@ -63,7 +62,10 @@ bool CreateFile(string route)
             fseek(fd, INODE_START + tmp_file_ino * INODE_SIZE, SEEK_SET);
             fread(tmp_file_inode, sizeof(inode), 1, fd);
             if (tmp_file_inode->di_mode == 0)
-                continue;
+            {
+                printf("文件夹名'%s' 有重复.\n", currentDirectory.fileName[i]);
+                return false;
+            }
             else
             {
                 printf("文件名'%s' 有重复.\n", currentDirectory.fileName[i]);
