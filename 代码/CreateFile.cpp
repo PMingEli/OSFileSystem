@@ -2,37 +2,31 @@
 //根据路径和文件名创建文件
 bool CreateFile(string route)
 {
-    char *filename;
+    char filename[14];
+    memset(filename,0,14);
     vector<string> direct;
-    if (route.find('/') != route.npos)
+    direct = split(route, "/");
+    int n = direct.size();
+    if (strcmp(direct[0].c_str(), "root") == 0)
     {
-        strcpy(filename, route.c_str());
+        while (dir_pointer > 1)
+        {
+            OpenDir("..");
+        }
+        for (int i = 1; i < n - 1; i++)
+        {
+            OpenDir(direct[i].c_str());
+        }
     }
     else
     {
-        direct = split(route, "/");
-        int n = direct.size();
-        if (strcmp(direct[0].c_str(), "root") == 0)
+        for (int i = 0; i < n - 1; i++)
         {
-            while (dir_pointer > 1)
-            {
-                OpenDir("..");
-            }
-            for (int i = 1; i < n - 1; i++)
-            {
-                OpenDir(direct[i].c_str());
-            }
+            OpenDir(direct[i].c_str());
         }
-        else
-        {
-            for (int i = 0; i < n - 1; i++)
-            {
-                OpenDir(direct[i].c_str());
-            }
-        }
-
-        strcpy(filename, direct[n - 1].c_str());
     }
+
+    strcpy(filename, direct[n - 1].c_str());
 
     //文件名合法性检测
     if (filename == NULL || strlen(filename) > FILE_NAME_LENGTH)
