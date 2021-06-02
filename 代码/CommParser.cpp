@@ -155,13 +155,17 @@ void CommParser(inode *&currentInode)
         else if (strcmp("create", para1) == 0)
         {
             flag = false;
-            CreateFile(v[1]);
+            for(int i=1;i<v.size();i++){
+                CreateFile(v[i]);
+            }
         }
         //删除文件
         else if (strcmp("rm", para1) == 0)
         {
             flag = false;
-            DeleteFile(v[1]);
+            for(int i=1;i<v.size();i++){
+                DeleteFile(v[i]);
+            }
         }
         //打开文件
         else if (strcmp("open", para1) == 0)

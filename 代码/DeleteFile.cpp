@@ -2,31 +2,37 @@
 //删除文件
 bool DeleteFile(string route)
 {
+    char *filename;
     vector<string> direct;
-    direct = split(route, "/");
-    int n = direct.size();
-    if (strcmp(direct[0].c_str(), "root") == 0)
+    if (route.find('/') != route.npos)
     {
-        while (dir_pointer > 1)
-        {
-            OpenDir("..");
-        }
-        for (int i = 1; i < n - 1; i++)
-        {
-            OpenDir(direct[i].c_str());
-        }
+        strcpy(filename, route.c_str());
     }
     else
     {
-        for (int i = 0; i < n - 1; i++)
+        direct = split(route, "/");
+        int n = direct.size();
+        if (strcmp(direct[0].c_str(), "root") == 0)
         {
-            OpenDir(direct[i].c_str());
+            while (dir_pointer > 1)
+            {
+                OpenDir("..");
+            }
+            for (int i = 1; i < n - 1; i++)
+            {
+                OpenDir(direct[i].c_str());
+            }
         }
+        else
+        {
+            for (int i = 0; i < n - 1; i++)
+            {
+                OpenDir(direct[i].c_str());
+            }
+        }
+
+        strcpy(filename, direct[n - 1].c_str());
     }
-
-    char *filename;
-
-    strcpy(filename, direct[n - 1].c_str());
 
     //文件名合法性检测
     if (filename == NULL || strlen(filename) > FILE_NAME_LENGTH)
