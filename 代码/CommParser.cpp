@@ -98,7 +98,6 @@ void CommParser(inode *&currentInode)
         else if (strcmp("create", para1) == 0)
         {
             flag = false;
-            //scanf("%s", para2);
             strcpy(para2, v[1].c_str());
             para2[1023] = 0;
             CreateFile(para2);
