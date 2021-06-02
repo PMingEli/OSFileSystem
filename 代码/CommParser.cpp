@@ -151,7 +151,7 @@ void CommParser(inode *&currentInode)
             flag = false;
             if (mul_dir.size() < 1)
                 cout << "mkdir: 缺少操作数" << endl
-                     << "请尝试执行 \" mkdir-- help \" 来获取更多信息。";
+                     << "请尝试执行 \"help \" 来获取更多信息。";
             else
             {
                 for (int i = 0; i < mul_dir.size(); i++)
@@ -170,6 +170,35 @@ void CommParser(inode *&currentInode)
         //删除目录
         else if (strcmp("rmdir", para1) == 0)
         {
+            if (v.at(1).c_str()[0]== '-'){
+                if(v.at(1).c_str()[0]== 'p'){
+                    
+                }
+
+            }
+                vector<string> mul_dir = split(v.at(1), "/");
+            flag = false;
+            if (mul_dir.size() < 1)
+                cout << "mkdir: 缺少操作数" << endl
+                     << "请尝试执行 \"help \" 来获取更多信息。";
+            else
+            {
+                // for (int i = 0; i < mul_dir.size(); i++)
+                // {
+                //     strcpy(para2, mul_dir.at(i).c_str());
+                //     para2[1023] = 0; //security protection
+                //     MakeDir(para2);
+                //     OpenDir(para2);
+                // }
+                OpenMutipleDir(v.at(1));
+                for (int i = mul_dir.size() - 1; i >= 0; i--)
+                {
+                    strcpy(para2, mul_dir.at(i).c_str());
+                    para2[1023] = 0; //security protection
+                    RemoveDir(para2);
+                    OpenDir("..");
+                }
+            }
             flag = false;
             //scanf("%s", para2);
             strcpy(para2, v[1].c_str());
