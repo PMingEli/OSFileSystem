@@ -196,92 +196,110 @@ void CommParser(inode *&currentInode)
         //创建目录
         else if (strcmp("mkdir", para1) == 0)
         {
-            vector<string> mul_dir = split(v.at(1), "/");
             flag = false;
-<<<<<<< HEAD
-            if (mul_dir.size() < 1)
-                cout << "mkdir: 缺少操作数" << endl
-                     << "请尝试执行 \"help \" 来获取更多信息。";
-            else
-            {
-                for (int i = 0; i < mul_dir.size(); i++)
-                {
-                    strcpy(para2, mul_dir.at(i).c_str());
-                    para2[1023] = 0; //security protection
-                    MakeDir(para2);
-                    OpenDir(para2);
-                }
-                for (int i = 0; i < mul_dir.size(); i++)
-                {
-                    OpenDir("..");
-                }
-=======
             if (n < 2)
-            {
-                cout << "mkdir : 缺少参数" << endl;
-                cout << "请尝试执行“help”来获取更多信息" << endl;
-            }
-            else if (n > 2)
-            {
-                cout << "mkdir : 参数过多" << endl;
-                cout << "请尝试执行“help”来获取更多信息" << endl;
-            }
+                cout << "mkdir: 缺少操作数" << endl
+                     << "请尝试执行 \"help \" 来获取更多信息。" << endl;
             else
             {
-                strcpy(para2, v[1].c_str());
-                para2[1023] = 0; //security protection
-                MakeDir(para2);
->>>>>>> master
+                if (v.at(1).c_str()[0] == '-')
+                {
+                    if (v.at(1).c_str()[1] == 'p')
+                    {
+                        if (n < 3)
+                        {
+                            cout << "mkdir: 缺少操作数" << endl
+                                 << "请尝试执行 \"help \" 来获取更多信息。";
+                        }
+                        else
+                        {
+                            for (int m = 2; m < n; m++)
+                            {
+                                vector<string> mul_dir = split(v.at(m), "/");
+                                int i;
+                                for (i = 0; i < mul_dir.size(); i++)
+                                {
+                                    strcpy(para2, mul_dir.at(i).c_str());
+                                    para2[1023] = 0; //security protection
+                                    if (!MakeDir(para2))
+                                    {
+                                        break;
+                                    }
+                                    OpenDir(para2);
+                                }
+                                for (int j = 0; j < i; j++)
+                                {
+                                    OpenDir("..");
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    for (int m = 1; m < n; m++)
+                    {
+                        if (v.at(m).find('/') == v.at(m).npos)
+                        {
+                            strcpy(para2, v.at(1).c_str());
+                            para2[1023] = 0;
+                            MakeDir(para2);
+                            OpenDir("..");
+                        }
+                        else
+                        {
+                            cout << "mkdir: 无法创建目录 “" << v.at(m) << ": 没有那个文件或目录" << endl;
+                        }
+                    }
+                }
             }
         }
         //删除目录
         else if (strcmp("rmdir", para1) == 0)
         {
-            if (v.at(1).c_str()[0]== '-'){
-                if(v.at(1).c_str()[0]== 'p'){
-                    
-                }
-
-            }
-                vector<string> mul_dir = split(v.at(1), "/");
-            flag = false;
-            if (mul_dir.size() < 1)
-                cout << "mkdir: 缺少操作数" << endl
-                     << "请尝试执行 \"help \" 来获取更多信息。";
-            else
-            {
-                // for (int i = 0; i < mul_dir.size(); i++)
-                // {
-                //     strcpy(para2, mul_dir.at(i).c_str());
-                //     para2[1023] = 0; //security protection
-                //     MakeDir(para2);
-                //     OpenDir(para2);
-                // }
-                OpenMutipleDir(v.at(1));
-                for (int i = mul_dir.size() - 1; i >= 0; i--)
-                {
-                    strcpy(para2, mul_dir.at(i).c_str());
-                    para2[1023] = 0; //security protection
-                    RemoveDir(para2);
-                    OpenDir("..");
-                }
-            }
             flag = false;
             if (n < 2)
             {
-                cout << "rkdir : 缺少参数" << endl;
-                cout << "请尝试执行“help”来获取更多信息" << endl;
+                cout << "rmdir: 缺少操作数" << endl
+                     << "请尝试执行 \"help \" 来获取更多信息。" << endl;
             }
-            else if (n > 2)
+            if (v.at(1).c_str()[0] == '-')
             {
-                cout << "rkdir : 参数过多" << endl;
-                cout << "请尝试执行“help”来获取更多信息" << endl;
+                if (v.at(1).c_str()[1] == 'p')
+                {
+                    for (int i = 2; i < n; i++)
+                    {
+                        vector<string> mul_dir = split(v.at(i), "/");
+                        if (mul_dir.size() < 1)
+                            cout << "rmdir: 缺少操作数" << endl
+                                 << "请尝试执行 \"help \" 来获取更多信息。";
+                        else
+                        {
+                            if (OpenMutipleDir(v.at(i)))
+                            {
+                                for (int j = mul_dir.size() - 1; j >= 0; j--)
+                                {
+                                    strcpy(para2, mul_dir.at(j).c_str());
+                                    para2[1023] = 0; //security protection
+                                    if (RemoveDir(para2))
+                                    {
+                                        break;
+                                    }
+                                    OpenDir("..");
+                                }
+                            }
+                        }
+                    }
+                }
             }
             else
             {
-                strcpy(para2, v[1].c_str());
-                para2[1023] = 0; //security protection
-                RemoveDir(para2);
+                for (int i = 1; i < n; i++)
+                {
+                    strcpy(para2, v.at(i).c_str());
+                    para2[1023] = 0;
+                    RemoveDir(para2);
+                }
             }
         }
         //登出系统

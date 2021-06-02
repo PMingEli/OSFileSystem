@@ -177,7 +177,7 @@ bool Format();
 void Printsign();
 
 //目录多层访问
-void OpenMutipleDir(string route);
+bool OpenMutipleDir(string route);
 
 //文件多层访问
 inode *OpenMutipleFile(string route);
