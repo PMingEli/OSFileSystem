@@ -35,9 +35,25 @@ void CommParser(inode *&currentInode)
         else if (strcmp("cp", para1) == 0)
         { //文件复制
             flag = false;
-            scanf("%s", para2);
-            para2[1023] = 0; //安全保护
-            Copy(para2, currentInode);
+            if (n == 1)
+            {
+                cout << "cp: 缺少了文件操作数" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n == 2)
+            {
+                cout << "cp: 在'" << v[1] << "' 后缺少了要操作的目标文件" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n > 3)
+            {
+                cout << "cp: 操作数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else
+            {
+                Copy(v[1], v[2], currentInode);
+            }
         }
         else if (strcmp("mv", para1) == 0)
         { //重命名

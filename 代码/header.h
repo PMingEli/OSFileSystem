@@ -237,6 +237,6 @@ void Rename(char *filename);
 bool ln(char *filename);
 
 //文件复制
-bool Copy(char *filename, inode *&currentInode);
+bool Copy(string rroute, string troute, inode *&currentInode);
 
 #endif // HEADER_H_INCLUDED

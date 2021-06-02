@@ -25,7 +25,6 @@ bool CreateFile(string route)
             OpenDir(direct[i].c_str());
         }
     }
-    printf("%s\n", filename);
 
     strcpy(filename, direct[n - 1].c_str());
 
