@@ -46,80 +46,141 @@ void CommParser(inode *&currentInode)
             para2[1023] = 0; //安全保护
             Rename(para2);
         }
+        //显示当前目录
         else if (strcmp("pwd", para1) == 0)
-        { //显示当前目录
+        {
             flag = false;
             Ab_dir();
         }
+        //修改密码
         else if (strcmp("passwd", para1) == 0)
         {
             flag = false;
             Passwd();
         }
+        //用户权限
         else if (strcmp("chmod", para1) == 0)
-        { //用户权限
+        {
             flag = false;
-            strcpy(para2, v[1].c_str());
-            //scanf("%s", para2);
-            para2[1023] = 0;
-            Chmod(para2);
+            if (n == 1)
+            {
+                cout << "chmod : 在chgrp后缺少了要操作的目标文件" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n > 2)
+            {
+                cout << "chmod : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else
+            {
+                strcpy(para2, v[1].c_str());
+                para2[1023] = 0;
+                Chmod(para2);
+            }
         }
+        //更改用户权限
         else if (strcmp("chown", para1) == 0)
-        { //更改用户权限
+        {
             flag = false;
-            //scanf("%s", para2);
-            strcpy(para2, v[1].c_str());
-            para2[1023] = 0;
-            Chown(para2);
+            if (n == 1)
+            {
+                cout << "chown : 在chgrp后缺少了要操作的目标文件" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n > 2)
+            {
+                cout << "chown : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else
+            {
+                strcpy(para2, v[1].c_str());
+                para2[1023] = 0;
+                Chown(para2);
+            }
         }
+        //更改所属组
         else if (strcmp("chgrp", para1) == 0)
-        { //更改所属组
+        {
             flag = false;
-            //scanf("%s", para2);
-            strcpy(para2, v[1].c_str());
-            para2[1023] = 0;
-            Chgrp(para2);
+            if (n == 1)
+            {
+                cout << "chgrp : 在chgrp后缺少了要操作的目标文件" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n > 2)
+            {
+                cout << "chgrp : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else
+            {
+                strcpy(para2, v[1].c_str());
+                para2[1023] = 0;
+                Chgrp(para2);
+            }
         }
+        //显示信息
         else if (strcmp("info", para1) == 0)
         {
-            printf("系统信息:\n总共的block:%d\n空闲block:%d\n总inode:%d\n剩余inode:%d\n\n", superBlock.s_num_block, superBlock.s_num_fblock, superBlock.s_num_inode, superBlock.s_num_finode);
-            for (int i = 0; i < 50; i++)
+            if (n == 1)
             {
-                if (i > superBlock.special_free)
-                    printf("-1\t");
-                else
-                    printf("%d\t", superBlock.special_stack[i]);
-                if (i % 10 == 9)
-                    printf("\n");
+                printf("系统信息:\n总共的block:%d\n空闲block:%d\n总inode:%d\n剩余inode:%d\n\n", superBlock.s_num_block, superBlock.s_num_fblock, superBlock.s_num_inode, superBlock.s_num_finode);
+                for (int i = 0; i < 50; i++)
+                {
+                    if (i == 0)
+                    {
+                        printf("%d\t", superBlock.special_free);
+                    }
+                    else
+                    {
+                        if (i > superBlock.special_free)
+                            printf("-1\t");
+                        else
+                            printf("%d\t", superBlock.special_stack[i]);
+                        if (i % 10 == 9)
+                            printf("\n");
+                    }
+                }
+                printf("\n\n");
             }
-            printf("\n\n");
+            else
+            {
+                cout << "info : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
         }
         //创建文件
         else if (strcmp("create", para1) == 0)
         {
             flag = false;
-            //scanf("%s", para2);
-            strcpy(para2, v[1].c_str());
-            para2[1023] = 0;
-            CreateFile(para2);
+            CreateFile(v[1]);
         }
         //删除文件
         else if (strcmp("rm", para1) == 0)
         {
             flag = false;
-            //scanf("%s", para2);
-            strcpy(para2, v[1].c_str());
-            para2[1023] = 0;
-            DeleteFile(para2);
+            DeleteFile(v[1]);
         }
         //打开文件
         else if (strcmp("open", para1) == 0)
         {
             flag = true;
-            //scanf("%s", para2);
-            strcpy(para2, v[1].c_str());
-            para2[1023] = 0;
-            currentInode = OpenFile(para2);
+            if (n < 2)
+            {
+                cout << "open : 在open后缺少了要操作的目标文件" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n > 2)
+            {
+                cout << "open : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else
+            {
+                currentInode = OpenMutipleFile(v[1]);
+            }
         }
         //写文件
         else if (strcmp("insert", para1) == 0)
@@ -145,7 +206,7 @@ void CommParser(inode *&currentInode)
                     cout << "insert : 在insert后缺少了要操作的目标文件" << endl;
                     cout << "请尝试执行“help”来获取更多信息" << endl;
                 }
-                else if (n > 2)
+                else
                 {
                     currentInode = OpenMutipleFile(v[1]);
                     for (int i = 2; i < n - 1; i++)
@@ -153,30 +214,62 @@ void CommParser(inode *&currentInode)
                         strcat(para2, v[i].c_str());
                         strcat(para2, " ");
                     }
-                    strcat(para2, v[n - 1].c_str());
-                    para2[1023] = 0;
-                    Write(*currentInode, para2);
+                    if (n > 2)
+                    {
+                        strcat(para2, v[n - 1].c_str());
+                        para2[1023] = 0;
+                        Write(*currentInode, para2);
+                    }
                 }
             }
         }
         //读文件
         else if (strcmp("cat", para1) == 0)
         {
-            flag = false;
-            if (n < 2)
+            if (flag)
             {
-                cout << "cat : 在cat后缺少了要操作的目标文件" << endl;
-                cout << "请尝试执行“help”来获取更多信息" << endl;
-            }
-            else if (n > 2)
-            {
-                cout << "cat : 参数过多" << endl;
-                cout << "请尝试执行“help”来获取更多信息" << endl;
+                if (n == 1)
+                {
+                    PrintFile(*currentInode);
+                }
+                else
+                {
+                    flag = false;
+                    if (n < 2)
+                    {
+                        cout << "cat : 在cat后缺少了要操作的目标文件" << endl;
+                        cout << "请尝试执行“help”来获取更多信息" << endl;
+                    }
+                    else if (n > 2)
+                    {
+                        cout << "cat : 参数过多" << endl;
+                        cout << "请尝试执行“help”来获取更多信息" << endl;
+                    }
+                    else
+                    {
+                        currentInode = OpenMutipleFile(v[1]);
+                        PrintFile(*currentInode);
+                    }
+                }
             }
             else
             {
-                currentInode = OpenMutipleFile(v[1]);
-                PrintFile(*currentInode);
+                flag = false;
+                if (n < 2)
+                {
+                    cout << "cat : 在cat后缺少了要操作的目标文件" << endl;
+                    cout << "请尝试执行“help”来获取更多信息" << endl;
+                }
+                else if (n > 2)
+                {
+                    cout << "cat : 参数过多" << endl;
+                    cout << "请尝试执行“help”来获取更多信息" << endl;
+                }
+                else
+                {
+                    currentInode = OpenMutipleFile(v[1]);
+                    PrintFile(*currentInode);
+                }
             }
         }
         //打开一个目录

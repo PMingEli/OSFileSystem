@@ -3,7 +3,7 @@
 void List()
 {
     printf("\n     name\tuser\tgroup\tinodeID\tIcount\tsize\tpermission\ttime\n");
-    for (int i = 0; i < DIRECTORY_NUM; i++)
+    for (int i = 2; i < DIRECTORY_NUM; i++)
     {
         if (strlen(currentDirectory.fileName[i]) > 0)
         {

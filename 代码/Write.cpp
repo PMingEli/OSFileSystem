@@ -93,15 +93,20 @@ int Write(inode &ifile, const char *content)
     //3. 写入第一块.
     if (ifile.di_addr[0] == -1)
     {
-        find_free_block(block_num);
+        // find_free_block(block_num);
         ifile.di_addr[0] = block_num;
-        fseek(fd, DATA_START + block_num * BLOCK_SIZE, SEEK_SET);
+        // fseek(fd, DATA_START + block_num * BLOCK_SIZE, SEEK_SET);
+        fseek(fd, DATA_START + block_num * BLOCK_SIZE + ifile.di_size % BLOCK_SIZE, SEEK_SET);
     }
     else
         fseek(fd, DATA_START + block_num * BLOCK_SIZE + ifile.di_size % BLOCK_SIZE, SEEK_SET);
     char data[BLOCK_SIZE];
     if (num_block_needed == 0)
     {
+        // if(ifile.di_size==0){
+        //     fwrite("\0", BLOCK_SIZE, 1, fd);
+        //     fseek(fd, DATA_START + block_num * BLOCK_SIZE, SEEK_SET);
+        // }
         fwrite(content, len_content, 1, fd);
         fseek(fd, DATA_START + block_num * BLOCK_SIZE, SEEK_SET);
         fread(data, sizeof(data), 1, fd);

@@ -1,7 +1,34 @@
 #include "header.h"
 //根据文件名创建文件
-bool CreateFile(const char *filename)
+bool CreateFile(string route)
 {
+
+    vector<string> direct;
+    direct = split(route, "/");
+    int n = direct.size();
+    if (strcmp(direct[0].c_str(), "root") == 0)
+    {
+        while (dir_pointer > 1)
+        {
+            OpenDir("..");
+        }
+        for (int i = 1; i < n - 1; i++)
+        {
+            OpenDir(direct[i].c_str());
+        }
+    }
+    else
+    {
+        for (int i = 0; i < n - 1; i++)
+        {
+            OpenDir(direct[i].c_str());
+        }
+    }
+
+    char *filename;
+
+    strcpy(filename, direct[n - 1].c_str());
+
     //文件名合法性检测
     if (filename == NULL || strlen(filename) > FILE_NAME_LENGTH)
     {
@@ -63,10 +90,18 @@ bool CreateFile(const char *filename)
     //创建新的inode
     inode ifile_tmp;
     ifile_tmp.i_ino = new_ino;
+    find_free_block(ifile_tmp.i_ino);
+    // fseek(fd,DATA_START + new_ino * BLOCK_SIZE, SEEK_SET);
+
     ifile_tmp.di_number = 1;
     ifile_tmp.di_mode = 1; //1 表示文件
     ifile_tmp.di_size = 0; //新文件大小为0
     memset(ifile_tmp.di_addr, -1, sizeof(unsigned int) * NADDR);
+    for (unsigned int i = 0; i < BLOCK_SIZE; i++)
+    {
+        fseek(fd, DATA_START + ifile_tmp.di_addr[0] * BLOCK_SIZE + i, SEEK_SET);
+        fputc('\0', fd);
+    }
     ifile_tmp.di_uid = userID;                //当前用户id.
     ifile_tmp.di_grp = users.groupID[userID]; //当前用户的组
     ifile_tmp.permission = MAX_PERMISSION;
@@ -126,7 +161,6 @@ bool CreateFile(const char *filename)
 
     //更新超级块
     superBlock.s_num_finode--;
-    superBlock.special_stack[0]--;
     fseek(fd, BLOCK_SIZE, SEEK_SET);
     fwrite(&superBlock, sizeof(filsys), 1, fd);
 
