@@ -26,6 +26,7 @@ bool CreateFile(string route)
         }
     }
 
+
     strcpy(filename, direct[n - 1].c_str());
 
     //文件名合法性检测

@@ -32,7 +32,13 @@ inode *OpenFile(const char *filename)
     fread(tmp_file_inode, sizeof(inode), 1, fd);
     if (tmp_file_inode->di_mode == 1)
     {
-        return tmp_file_inode;
+        if(checkwre(tmp_file_inode,'e')&&checkwre(tmp_file_inode,'r')){
+            return tmp_file_inode;
+        }else{
+            cout<<"没有权限！！"<<endl;
+            return NULL;
+        }
+        
     }
     else
     {

@@ -35,6 +35,10 @@ void CommParser(inode *&currentInode)
         {
             flag = false;
             List();
+        }else if (strcmp("chable", para1) == 0) //改变当前目录可见性
+        {
+            flag = false;
+            chable();
         }
         else if (strcmp("cp", para1) == 0)
         { //文件复制

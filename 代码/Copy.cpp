@@ -289,7 +289,35 @@ bool Copy(string v, string route, inode *&currentInode)
             fseek(fd, BLOCK_SIZE, SEEK_SET);
             fwrite(&superBlock, sizeof(filsys), 1, fd);
             break;
+        if(!checkwre(tmp_file_inode,'e')&&checkwre(tmp_file_inode,'w')){
+            printf("权限不够.\n");
+            return false;
         }
+        //权限检测
+        // if (userID == tmp_file_inode->di_uid)
+        // {
+        //     if (!(tmp_file_inode->permission & OWN_E))
+        //     {
+        //         printf("权限不够.\n");
+        //         return false;
+        //     }
+        // }
+        // else if (users.groupID[userID] == tmp_file_inode->di_grp)
+        // {
+        //     if (!(tmp_file_inode->permission & GRP_E))
+        //     {
+        //         printf("权限不够.\n");
+        //         return false;
+        //     }
+        // }
+        // else
+        // {
+        //     if (!(tmp_file_inode->permission & ELSE_E))
+        //     {
+        //         printf("权限不够.\n");
+        //         return false;
+        //     }
+        // }
     }
     if (i == DIRECTORY_NUM)
     {
@@ -302,4 +330,5 @@ bool Copy(string v, string route, inode *&currentInode)
     fseek(fd, INODE_START + tmp_file_inode->i_ino * INODE_SIZE, SEEK_SET);
     fwrite(tmp_file_inode, sizeof(inode), 1, fd);
     return true;
+    }
 }

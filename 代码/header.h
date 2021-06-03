@@ -62,6 +62,8 @@ const unsigned short MAX_PERMISSION = 511;
 //用户最大权限
 const unsigned short MAX_OWNER_PERMISSION = 448;
 
+
+
 //权限
 const unsigned short ELSE_E = 1;
 const unsigned short ELSE_W = 1 << 1;
@@ -85,6 +87,7 @@ struct inode
     unsigned short di_uid;       //文件所属用户id.
     unsigned short di_grp;       //文件所属组
     unsigned short di_size;      //文件大小.
+   // bool enable;                 //文件可见性
     char time[83];
 };
 
@@ -125,6 +128,8 @@ extern unsigned short inode_bitmap[INODE_NUM];
 
 //用户
 extern userPsw users;
+//用户组
+extern unsigned short userGroup;
 
 //用户id
 extern unsigned short userID;
@@ -134,6 +139,9 @@ extern char userName[USER_NAME_LENGTH + 6];
 
 //当前目录
 extern directory currentDirectory;
+
+//当前inode
+extern inode curinode;
 
 extern char ab_dir[100][14];
 
@@ -172,6 +180,8 @@ void recycle_block(unsigned int &inode_number);
 
 //初始化文件系统
 bool Format();
+//检查权限
+bool checkwre(inode * currentInode , char type);
 
 //终端显示目录
 void Printsign();
@@ -235,6 +245,8 @@ void Rename(char *filename);
 
 //链接
 bool ln(char *filename);
+//改变当前目录的可见性
+//void chable();
 
 //文件复制
 bool Copy(string v, string route, inode *&currentInode);

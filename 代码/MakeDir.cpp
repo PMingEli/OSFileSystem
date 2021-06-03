@@ -2,6 +2,14 @@
 //创建新目录，新目录包含. ..
 bool MakeDir(const char *dirname)
 {
+    //检测权限
+    inode *currentInode=&curinode;
+    
+    if(!(checkwre(currentInode,'w')||(curinode.i_ino==0))){
+        cout<<"没有权限！！"<<endl;
+        return false;
+    }
+    
     //参数检测
     if (dirname == NULL || strlen(dirname) > FILE_NAME_LENGTH)
     {
@@ -92,6 +100,7 @@ bool MakeDir(const char *dirname)
     idir_tmp.time[64] = 0;
     idir_tmp.icount = 0;
     idir_tmp.permission = MAX_PERMISSION;
+    //idir_tmp.enable=true;
     fseek(fd, INODE_START + new_ino * INODE_SIZE, SEEK_SET);
     fwrite(&idir_tmp, sizeof(inode), 1, fd);
 

@@ -2,6 +2,7 @@
 
 bool OpenMutipleDir(string route)
 {
+    
     vector<string> directory;
     directory = split(route, "/");
     int n = directory.size();

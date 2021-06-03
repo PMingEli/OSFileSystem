@@ -2,6 +2,8 @@
 //对文件或目录重命名
 void Rename(char *filename)
 {
+
+
     printf("0=文件，1=目录，请选择:");
     int tt;
     scanf("%d", &tt);
@@ -31,6 +33,13 @@ void Rename(char *filename)
         fseek(fd, INODE_START + tmp_file_ino * INODE_SIZE, SEEK_SET);
         fread(tmp_file_inode, sizeof(inode), 1, fd);
     } while (tmp_file_inode->di_mode == tt);
+
+    //检查权限
+     if (!((checkwre(tmp_file_inode,'e')||checkwre(tmp_file_inode,'w'))))
+        {
+            printf("权限不够.\n");
+            return ;
+        }
     printf("请输入新的用户名:");
     char str[14];
     scanf("%s", str);

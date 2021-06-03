@@ -32,6 +32,7 @@ bool Login(const char *user, const char *password)
                 //登录成功提示
                 printf("登录成功！.\n");
                 userID = users.userID[i];
+                userGroup=users.groupID[i];
                 //个性化设置
                 memset(userName, 0, USER_NAME_LENGTH + 6);
                 if (userID == 0)

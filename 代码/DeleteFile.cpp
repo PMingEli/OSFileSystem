@@ -62,31 +62,11 @@ bool DeleteFile(string route)
     } while (tmp_file_inode.di_mode == 0);
 
     //权限检测
-
-    if (userID == tmp_file_inode.di_uid)
-    {
-        if (!(tmp_file_inode.permission & OWN_E))
+    if (!((checkwre(&tmp_file_inode,'e')||checkwre(&tmp_file_inode,'w'))))
         {
-            printf("不好意思，你没有权限删除.\n");
-            return -1;
+            printf("权限不够.\n");
+            return false;
         }
-    }
-    else if (users.groupID[userID] == tmp_file_inode.di_grp)
-    {
-        if (!(tmp_file_inode.permission & GRP_E))
-        {
-            printf("不好意思，没有权限删除.\n");
-            return -1;
-        }
-    }
-    else
-    {
-        if (!(tmp_file_inode.permission & ELSE_E))
-        {
-            printf("不好意思，没有权限删除.\n");
-            return -1;
-        }
-    }
 
     //3.开始删除，inode赋值为0
     if (tmp_file_inode.icount > 0)

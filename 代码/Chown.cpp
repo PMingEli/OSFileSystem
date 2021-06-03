@@ -35,29 +35,10 @@ void Chown(char *filename)
         fread(tmp_file_inode, sizeof(inode), 1, fd);
     } while (tmp_file_inode->di_mode == tt);
 
-    if (userID == tmp_file_inode->di_uid)
-    {
-        if (!(tmp_file_inode->permission & OWN_E))
-        {
-            printf("权限不够.\n");
-            return;
-        }
-    }
-    else if (users.groupID[userID] == tmp_file_inode->di_grp)
-    {
-        if (!(tmp_file_inode->permission & GRP_E))
-        {
-            printf("权限不够.\n");
-            return;
-        }
-    }
-    else
-    {
-        if (!(tmp_file_inode->permission & ELSE_E))
-        {
-            printf("权限不够.\n");
-            return;
-        }
+    //检测权限
+    if(!((checkwre(tmp_file_inode,'w')&&checkwre(tmp_file_inode,'e')))){
+        cout<<"没有权限！！！"<<endl;
+        return;
     }
 
     printf("请输入用户名:");

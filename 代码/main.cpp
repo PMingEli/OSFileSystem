@@ -15,11 +15,16 @@ userPsw users;
 //用户id
 unsigned short userID = ACCOUNT_NUM;
 
+//用户组
+unsigned short userGroup =  ACCOUNT_NUM;
+
 //用户名
 char userName[USER_NAME_LENGTH + 6];
 
 //当前目录
 directory currentDirectory;
+
+inode curinode;
 
 char ab_dir[100][14];
 
