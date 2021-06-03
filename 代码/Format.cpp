@@ -89,10 +89,10 @@ bool Format()
 
     //创建根目录
     inode iroot_tmp;
-    iroot_tmp.i_ino = 0;   //根目录用掉0号块
-    iroot_tmp.di_number = 2;//目录下目录以及文件数量
-    iroot_tmp.di_mode = 0;                    //0 =目录
-    iroot_tmp.di_size = 0;                    //目录大小为0
+    iroot_tmp.i_ino = 0;     //根目录用掉0号块
+    iroot_tmp.di_number = 2; //目录下目录以及文件数量
+    iroot_tmp.di_mode = 0;   //0 =目录
+    iroot_tmp.di_size = 0;   //目录大小为0
     memset(iroot_tmp.di_addr, -1, sizeof(unsigned int) * NADDR);
     iroot_tmp.di_addr[0] = 0;
     iroot_tmp.permission = MAX_OWNER_PERMISSION;

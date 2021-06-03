@@ -52,7 +52,29 @@ void CommParser(inode *&currentInode)
             }
             else
             {
-                Copy(v[1], v[2], currentInode);
+                vector<string> directory;
+                directory = split(v[1], "/");
+                if (strcmp(directory[0].c_str(), "root") == 0)
+                {
+                    while (dir_pointer > 1)
+                    {
+                        OpenDir("..");
+                    }
+                    for (int i = 1; i < directory.size() - 1; i++)
+                    {
+                        OpenDir(directory[i].c_str());
+                    }
+                    strcpy(para2, directory[directory.size() - 1].c_str());
+                }
+                else
+                {
+                    for (int i = 0; i < directory.size() - 1; i++)
+                    {
+                        OpenDir(directory[i].c_str());
+                    }
+                    strcpy(para2, directory[directory.size() - 1].c_str());
+                }
+                Copy(para2, v[2], currentInode);
             }
         }
         else if (strcmp("mv", para1) == 0)
@@ -579,6 +601,7 @@ void CommParser(inode *&currentInode)
                     Format();
                     dir_pointer = 1;
                     Mount();
+                    dir_pointer = 1;
                     // printf("您真的要删除跑路吗？[y/n]\n");
                     // char label;
                     // cin >> label;
