@@ -62,8 +62,6 @@ const unsigned short MAX_PERMISSION = 511;
 //用户最大权限
 const unsigned short MAX_OWNER_PERMISSION = 448;
 
-
-
 //权限
 const unsigned short ELSE_E = 1;
 const unsigned short ELSE_W = 1 << 1;
@@ -87,7 +85,7 @@ struct inode
     unsigned short di_uid;       //文件所属用户id.
     unsigned short di_grp;       //文件所属组
     unsigned short di_size;      //文件大小.
-   // bool enable;                 //文件可见性
+                                 // bool enable;                 //文件可见性
     char time[83];
 };
 
@@ -181,7 +179,7 @@ void recycle_block(unsigned int &inode_number);
 //初始化文件系统
 bool Format();
 //检查权限
-bool checkwre(inode * currentInode , char type);
+bool checkwre(inode *currentInode, char type);
 
 //终端显示目录
 void Printsign();
@@ -241,7 +239,7 @@ void Passwd();
 void User_management();
 
 //对文件或目录重命名
-void Rename(char *filename);
+void Rename(char *filename, char *newfilename);
 
 //链接
 bool ln(char *filename);

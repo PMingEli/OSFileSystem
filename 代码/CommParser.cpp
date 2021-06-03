@@ -25,7 +25,7 @@ void CommParser(inode *&currentInode)
         {
             continue;
         }
-        History(system);
+        //History(system);
         v = split(system, " "); //根据多个字符切片
         n = v.size();
         strcpy(para1, v[0].c_str());
@@ -35,13 +35,15 @@ void CommParser(inode *&currentInode)
         {
             flag = false;
             List();
-        }else if (strcmp("chable", para1) == 0) //改变当前目录可见性
+        }
+        else if (strcmp("chable", para1) == 0) //改变当前目录可见性
         {
             flag = false;
-            chable();
+            //chable();
         }
+        //文件复制
         else if (strcmp("cp", para1) == 0)
-        { //文件复制
+        {
             flag = false;
             if (n == 1)
             {
@@ -63,12 +65,35 @@ void CommParser(inode *&currentInode)
                 Copy(v[1], v[2], currentInode);
             }
         }
+        //重命名
         else if (strcmp("mv", para1) == 0)
-        { //重命名
+        {
             flag = false;
-            scanf("%s", para2);
-            para2[1023] = 0; //安全保护
-            Rename(para2);
+            if (n == 1)
+            {
+                cout << "mv: 缺少了文件操作数" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n == 2)
+            {
+                cout << "mv: 在'" << v[1] << "' 后缺少了要操作的目标文件" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n > 3)
+            {
+                cout << "mv: 操作数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else
+            {
+                char para3[1024];
+                memset(para3, 0, 1024);
+                strcpy(para2, v[1].c_str());
+                strcpy(para3, v[2].c_str());
+                para2[1023] = 0; //安全保护
+                para3[1023] = 0;
+                Rename(para2, para3);
+            }
         }
         //显示当前目录
         else if (strcmp("pwd", para1) == 0)

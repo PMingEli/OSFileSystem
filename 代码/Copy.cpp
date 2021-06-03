@@ -115,30 +115,10 @@ bool Copy(string v, string route, inode *&currentInode)
         fread(tmp_file_inode, sizeof(inode), 1, fd);
     } while (tmp_file_inode->di_mode == 0);
 
-    //权限检测
-    if (userID == tmp_file_inode->di_uid)
+    if (!checkwre(tmp_file_inode, 'e') && checkwre(tmp_file_inode, 'w'))
     {
-        if (!(tmp_file_inode->permission & OWN_E))
-        {
-            printf("权限不够.\n");
-            return false;
-        }
-    }
-    else if (users.groupID[userID] == tmp_file_inode->di_grp)
-    {
-        if (!(tmp_file_inode->permission & GRP_E))
-        {
-            printf("权限不够.\n");
-            return false;
-        }
-    }
-    else
-    {
-        if (!(tmp_file_inode->permission & ELSE_E))
-        {
-            printf("权限不够.\n");
-            return false;
-        }
+        printf("权限不够.\n");
+        return false;
     }
     //取绝对地址
     OpenMutipleDir(www);
@@ -203,7 +183,7 @@ bool Copy(string v, string route, inode *&currentInode)
         }
         strcat(absolute, "#");
     }
-    // cout << absolute << endl;
+    cout << absolute << endl;
     char dirname[14];
     int pos_dir = 0;
     bool root = false;
@@ -260,14 +240,8 @@ bool Copy(string v, string route, inode *&currentInode)
         if (strlen(cur_dir.fileName[i]) == 0)
         {
             strcat(cur_dir.fileName[i], filename);
-            int new_ino = 0;
-            for (; new_ino < INODE_NUM; new_ino++)
-            {
-                if (inode_bitmap[new_ino] == 0)
-                {
-                    break;
-                }
-            }
+            unsigned int new_ino = 0;
+            find_free_block(new_ino);
             inode ifile_tmp;
             ifile_tmp.i_ino = new_ino;
             ifile_tmp.icount = 0;
@@ -289,35 +263,7 @@ bool Copy(string v, string route, inode *&currentInode)
             fseek(fd, BLOCK_SIZE, SEEK_SET);
             fwrite(&superBlock, sizeof(filsys), 1, fd);
             break;
-        if(!checkwre(tmp_file_inode,'e')&&checkwre(tmp_file_inode,'w')){
-            printf("权限不够.\n");
-            return false;
         }
-        //权限检测
-        // if (userID == tmp_file_inode->di_uid)
-        // {
-        //     if (!(tmp_file_inode->permission & OWN_E))
-        //     {
-        //         printf("权限不够.\n");
-        //         return false;
-        //     }
-        // }
-        // else if (users.groupID[userID] == tmp_file_inode->di_grp)
-        // {
-        //     if (!(tmp_file_inode->permission & GRP_E))
-        //     {
-        //         printf("权限不够.\n");
-        //         return false;
-        //     }
-        // }
-        // else
-        // {
-        //     if (!(tmp_file_inode->permission & ELSE_E))
-        //     {
-        //         printf("权限不够.\n");
-        //         return false;
-        //     }
-        // }
     }
     if (i == DIRECTORY_NUM)
     {
@@ -330,5 +276,4 @@ bool Copy(string v, string route, inode *&currentInode)
     fseek(fd, INODE_START + tmp_file_inode->i_ino * INODE_SIZE, SEEK_SET);
     fwrite(tmp_file_inode, sizeof(inode), 1, fd);
     return true;
-    }
 }
