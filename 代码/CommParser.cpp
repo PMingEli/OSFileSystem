@@ -18,10 +18,14 @@ void CommParser(inode *&currentInode)
         Printsign();
         string system;
         getline(cin, system);
+        // while(system.==0){
+
+        // }
         if (system.length() == 0)
         {
             continue;
         }
+        History(system);
         v = split(system, " "); //根据多个字符切片
         n = v.size();
         strcpy(para1, v[0].c_str());
@@ -359,7 +363,7 @@ void CommParser(inode *&currentInode)
                             strcpy(para2, v.at(m).c_str());
                             para2[1023] = 0;
                             MakeDir(para2);
-                            OpenDir("..");
+                            // OpenDir("..");
                         }
                         else
                         {
