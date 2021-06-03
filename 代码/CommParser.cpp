@@ -140,8 +140,9 @@ void CommParser(inode *&currentInode)
             flag = false;
             List();
         }
+        //文件复制
         else if (strcmp("cp", para1) == 0)
-        { //文件复制
+        {
             flag = false;
             if (n == 1)
             {
@@ -153,22 +154,57 @@ void CommParser(inode *&currentInode)
                 cout << "cp: 在'" << v[1] << "' 后缺少了要操作的目标文件" << endl;
                 cout << "请尝试执行“help”来获取更多信息" << endl;
             }
-            else if (n > 3)
+            else if (n == 3)
+            {
+                if (strcmp(v[1].c_str(), "-l") == 0)
+                {
+                    cout << "cp: 在'" << v[2] << "' 后缺少了要操作的目标文件" << endl;
+                    cout << "请尝试执行“help”来获取更多信息" << endl;
+                }
+                else
+                {
+                    Copy(v[1], v[2], currentInode);
+                }
+            }
+            else if (n == 4)
+            {
+                ln(v[2], v[3]);
+            }
+            else
             {
                 cout << "cp: 操作数过多" << endl;
                 cout << "请尝试执行“help”来获取更多信息" << endl;
             }
+        }
+        //重命名
+        else if (strcmp("mv", para1) == 0)
+        {
+            flag = false;
+            if (n == 1)
+            {
+                cout << "mv: 缺少了文件操作数" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n == 2)
+            {
+                cout << "mv: 在'" << v[1] << "' 后缺少了要操作的目标文件" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n > 3)
+            {
+                cout << "mv: 操作数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
             else
             {
-                Copy(v[1], v[2], currentInode);
+                char para3[1024];
+                memset(para3, 0, 1024);
+                strcpy(para2, v[1].c_str());
+                strcpy(para3, v[2].c_str());
+                para2[1023] = 0; //安全保护
+                para3[1023] = 0;
+                Rename(para2, para3);
             }
-        }
-        else if (strcmp("mv", para1) == 0)
-        { //重命名
-            flag = false;
-            scanf("%s", para2);
-            para2[1023] = 0; //安全保护
-            Rename(para2);
         }
         //显示当前目录
         else if (strcmp("pwd", para1) == 0)
@@ -186,21 +222,25 @@ void CommParser(inode *&currentInode)
         else if (strcmp("chmod", para1) == 0)
         {
             flag = false;
-            if (n == 1)
+            if (n < 3)
             {
                 cout << "chmod : 在chgrp后缺少了要操作的目标文件" << endl;
                 cout << "请尝试执行“help”来获取更多信息" << endl;
             }
-            else if (n > 2)
+            else if (n > 3)
             {
                 cout << "chmod : 参数过多" << endl;
                 cout << "请尝试执行“help”来获取更多信息" << endl;
             }
             else
             {
+                //char *type;
                 strcpy(para2, v[1].c_str());
+                //strcpy(type,v[2].c_str());
                 para2[1023] = 0;
-                Chmod(para2);
+               // cout<<"type:"<<type<<endl;
+               string str="111000111";
+                Chmod(para2,1,str);
             }
         }
         //更改用户权限
@@ -310,6 +350,35 @@ void CommParser(inode *&currentInode)
             else
             {
                 currentInode = OpenMutipleFile(v[1]);
+            }
+        }
+        //清空文件
+        else if (strcmp("clear", para1) == 0)
+        {
+            flag = false;
+            for (int i = 1; i < n; i++)
+            {
+                ClearFile(v[i]);
+            }
+        }
+        //Vim打开文件
+        else if (strcmp("vim", para1) == 0)
+        {
+            flag = true;
+            if (n < 2)
+            {
+                cout << "vim : 在vim后缺少了要操作的目标文件" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n > 2)
+            {
+                cout << "vim : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else
+            {
+                currentInode = OpenMutipleFile(v[1]);
+                VimFile(*currentInode);
             }
         }
         //写文件
@@ -574,33 +643,12 @@ void CommParser(inode *&currentInode)
                         }
                     }
                 } while (Login(tmp_userName, tmp_userPassword) != true);
-
                 inode *currentInode = new inode;
             }
             else
             {
                 cout << "logout : 参数过多" << endl;
                 cout << "请尝试执行“help”来获取更多信息" << endl;
-            }
-        }
-        else if (strcmp("ln", para1) == 0)
-        {
-            flag = false;
-            if (n < 2)
-            {
-                cout << "ln : 缺少参数" << endl;
-                cout << "请尝试执行“help”来获取更多信息" << endl;
-            }
-            else if (n > 2)
-            {
-                cout << "ln : 参数过多" << endl;
-                cout << "请尝试执行“help”来获取更多信息" << endl;
-            }
-            else
-            {
-                strcpy(para2, v[1].c_str());
-                para2[1023] = 0; //security protection
-                ln(para2);
             }
         }
         //登录
@@ -689,23 +737,6 @@ void CommParser(inode *&currentInode)
                     dir_pointer = 1;
                     Mount();
                     dir_pointer = 1;
-                    // printf("您真的要删除跑路吗？[y/n]\n");
-                    // char label;
-                    // cin >> label;
-                    // while (label != 'n' && label != 'N')
-                    // {
-                    //     if (label == 'y' || label == 'Y')
-                    //     {
-                    //         Format();
-                    //         Mount();
-                    //         break;
-                    //     }
-                    //     else
-                    //     {
-                    //         printf("输入错误，请重新输入[y/n]\n");
-                    //         cin >> label;
-                    //     }
-                    // }
                 }
                 else
                 {
@@ -722,15 +753,7 @@ void CommParser(inode *&currentInode)
         else
         {
             flag = false;
-            if (n == 1)
-            {
-                Help();
-            }
-            else
-            {
-                cout << "help : 参数过多" << endl;
-                cout << "请尝试执行“help”来获取更多信息" << endl;
-            }
+            Help();
         }
     }
     cout << endl;

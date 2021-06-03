@@ -2,6 +2,10 @@
 
 void VimFile(inode &ifile)
 {
+    if (&ifile == NULL)
+    {
+        return;
+    }
     //权限检测
     if (userID == ifile.di_uid)
     {
@@ -75,6 +79,5 @@ void VimFile(inode &ifile)
             }
         }
     }
-    cout << system("gnome-terminal -- vim ./com.txt")
-         << endl;
+    system("gnome-terminal -- vim ./com.txt");
 };

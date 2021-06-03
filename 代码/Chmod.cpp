@@ -1,10 +1,10 @@
 #include "header.h"
 //修改文件权限
-void Chmod(char *filename)
+void Chmod(char *filename,int type,string str)
 {
-    printf("0=文件，1=目录，请输入:");
-    int tt;
-    scanf("%d", &tt);
+    // printf("0=文件，1=目录，请输入:");
+    // int tt;
+    // scanf("%d", &tt);
     if (filename == NULL || strlen(filename) > FILE_NAME_LENGTH)
     {
         printf("不合法.\n");
@@ -14,6 +14,7 @@ void Chmod(char *filename)
     //1. 检查是否存在.
     int pos_in_directory = -1;
     inode *tmp_file_inode = new inode;
+   //int i=0;
     do
     {
         pos_in_directory++;
@@ -29,40 +30,25 @@ void Chmod(char *filename)
             printf("没有找到.\n");
             return;
         }
+       // cout<<"pos in dir:"<<pos_in_directory<<endl;
 
         //2. 检查是否存在目录.
         int tmp_file_ino = currentDirectory.inodeID[pos_in_directory];
         fseek(fd, INODE_START + tmp_file_ino * INODE_SIZE, SEEK_SET);
         fread(tmp_file_inode, sizeof(inode), 1, fd);
-    } while (tmp_file_inode->di_mode == tt);
+       // cout<<"tem_inode-di-mode"<<tt<<endl;
+       // cout<<"loop:"<<i++<<endl;
+        
+    } while (tmp_file_inode->di_mode == type);
 
-    printf("请输入 0&1 串给予权限\n");
-    printf("格式: rwerwerwe\n");
-    char str[10];
-    scanf("%s", str);
-    if (userID == tmp_file_inode->di_uid)
-    {
-        if (!(tmp_file_inode->permission & OWN_E))
-        {
-            printf("权限不够.\n");
-            return;
-        }
-    }
-    else if (users.groupID[userID] == tmp_file_inode->di_grp)
-    {
-        if (!(tmp_file_inode->permission & GRP_E))
-        {
-            printf("权限不够.\n");
-            return;
-        }
-    }
-    else
-    {
-        if (!(tmp_file_inode->permission & ELSE_E))
-        {
-            printf("权限不够.\n");
-            return;
-        }
+    // printf("请输入 0&1 串给予权限\n");
+    // printf("格式: rwerwerwe\n");
+    // char str[10];
+    // scanf("%s", &str);
+//判断权限
+    if(!checkwre(tmp_file_inode,'e')){
+        cout<<"没有权限"<<endl;
+        return;
     }
     int temp = 0;
     for (int i = 0; i < 8; i++)

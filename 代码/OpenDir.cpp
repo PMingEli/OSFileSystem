@@ -25,38 +25,19 @@ bool OpenDir(const char *dirname)
         return false;
     }
 
-    //2. 查找inode，查看是否为目录.
+    //2. 查找inode，查看是否为目录.是否具有权限
     tmp_dir_ino = currentDirectory.inodeID[pos_in_directory];
     fseek(fd, INODE_START + tmp_dir_ino * INODE_SIZE, SEEK_SET);
     fread(&tmp_dir_inode, sizeof(inode), 1, fd);
     if (tmp_dir_inode.di_mode == 0)
     {
-        if (userID == tmp_dir_inode.di_uid)
-        {
-            if (tmp_dir_inode.permission & OWN_E != OWN_E)
-            {
-                printf("权限不够.\n");
-                return NULL;
-            }
-        }
-        else if (users.groupID[userID] == tmp_dir_inode.di_grp)
-        {
-            if (tmp_dir_inode.permission & GRP_E != GRP_E)
-            {
-                printf("权限不够.\n");
-                return false;
-            }
-        }
-        else
-        {
-            if (tmp_dir_inode.permission & ELSE_E != ELSE_E)
-            {
-                printf("权限不够.\n");
-                return false;
-            }
+          if(!(checkwre(&tmp_dir_inode,'e')&&checkwre(&tmp_dir_inode,'r'))){
+              cout<<"没有权限！！"<<endl;
+            return false;
         }
         //3. 更新当前目录.
         directory new_current_dir;
+        curinode =tmp_dir_inode;
         fseek(fd, DATA_START + tmp_dir_inode.di_addr[0] * BLOCK_SIZE, SEEK_SET);
         fread(&new_current_dir, sizeof(directory), 1, fd);
         currentDirectory = new_current_dir;

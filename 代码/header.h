@@ -84,7 +84,7 @@ struct inode
     unsigned short permission;   //文件权限
     unsigned short di_uid;       //文件所属用户id.
     unsigned short di_grp;       //文件所属组
-    unsigned short di_size;      //文件大小.
+    unsigned short di_size;      //文件大小                 //文件可见性
     char time[83];
 };
 
@@ -125,6 +125,8 @@ extern unsigned short inode_bitmap[INODE_NUM];
 
 //用户
 extern userPsw users;
+//用户组
+extern unsigned short userGroup;
 
 //用户id
 extern unsigned short userID;
@@ -134,6 +136,9 @@ extern char userName[USER_NAME_LENGTH + 6];
 
 //当前目录
 extern directory currentDirectory;
+
+//当前inode
+extern inode curinode;
 
 extern char ab_dir[100][14];
 
@@ -176,6 +181,8 @@ void recycle_block(unsigned int &inode_number);
 
 //初始化文件系统
 bool Format();
+//检查权限
+bool checkwre(inode *currentInode, char type);
 
 //终端显示目录
 void Printsign();
@@ -213,6 +220,9 @@ bool OpenDir(const char *dirname);
 //Vim打开文件
 void VimFile(inode &ifile);
 
+//清空文件
+bool ClearFile(string route);
+
 //显示当前目录下的文件信息
 void List();
 
@@ -220,7 +230,7 @@ void List();
 void Ab_dir();
 
 //修改文件权限
-void Chmod(char *filename);
+void Chmod(char *filename,int type,string str);
 
 //改变文件所属
 void Chown(char *filename);
@@ -235,10 +245,10 @@ void Passwd();
 void User_management();
 
 //对文件或目录重命名
-void Rename(char *filename);
+void Rename(char *filename, char *newfilename);
 
 //链接
-bool ln(char *filename);
+bool ln(string v, string route);
 
 //文件复制
 bool Copy(string v, string route, inode *&currentInode);

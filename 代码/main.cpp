@@ -15,11 +15,16 @@ userPsw users;
 //用户id
 unsigned short userID = ACCOUNT_NUM;
 
+//用户组
+unsigned short userGroup = ACCOUNT_NUM;
+
 //用户名
 char userName[USER_NAME_LENGTH + 6];
 
 //当前目录
 directory currentDirectory;
+
+inode curinode;
 
 char ab_dir[100][14];
 
@@ -44,18 +49,16 @@ int main()
         Format();
     }
     Sys_start();
-    ab_dir[dir_pointer][0] = 'r';
-    ab_dir[dir_pointer][1] = 'o';
-    ab_dir[dir_pointer][2] = 'o';
-    ab_dir[dir_pointer][3] = 't';
-    ab_dir[dir_pointer][4] = '\0';
-    dir_pointer++;
     //登录
     char tmp_userName[USER_NAME_LENGTH];
     char tmp_userPassword[USER_PASSWORD_LENGTH * 5];
-
+    int count=0;
     do
     {
+        if(count==3){
+            cout<<"错误次数过多！"<<endl;
+            return 0;
+        }
         memset(tmp_userName, 0, USER_NAME_LENGTH);
         memset(tmp_userPassword, 0, USER_PASSWORD_LENGTH * 5);
 
@@ -66,6 +69,7 @@ int main()
         char c;
         scanf("%c", &c);
         int i = 0;
+        count++;
         while (1)
         { // cout << loop_num;
 

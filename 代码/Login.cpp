@@ -34,6 +34,7 @@ bool Login(const char *user, const char *password)
                 //登录成功提示
                 printf("登录成功！.\n");
                 userID = users.userID[i];
+                userGroup = users.groupID[i];
                 //个性化设置
                 memset(userName, 0, USER_NAME_LENGTH + 6);
                 if (userID == 0)
@@ -45,10 +46,19 @@ bool Login(const char *user, const char *password)
                 }
                 else
                 {
+                    strcat(userName, "user");
+                    strcat(userName, "@");
                     strcat(userName, users.userName[i]);
                     //strcat(userName, "#");
                 }
-
+                memset(ab_dir[0], 0, 14);
+                strcpy(ab_dir[0], users.userName[i]);
+                // ab_dir[dir_pointer][0] = 'r';
+                // ab_dir[dir_pointer][1] = 'o';
+                // ab_dir[dir_pointer][2] = 'o';
+                // ab_dir[dir_pointer][3] = 't';
+                // ab_dir[dir_pointer][4] = '\0';
+                dir_pointer = 1;
                 return true;
             }
             else

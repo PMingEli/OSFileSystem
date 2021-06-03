@@ -7,7 +7,7 @@ bool DeleteFile(string route)
     vector<string> direct;
     direct = split(route, "/");
     int n = direct.size();
-    if (strcmp(direct[0].c_str(), "root") == 0)
+    if (strcmp(direct[0].c_str(), ab_dir[0]) == 0)
     {
         while (dir_pointer > 1)
         {
@@ -62,30 +62,10 @@ bool DeleteFile(string route)
     } while (tmp_file_inode.di_mode == 0);
 
     //权限检测
-
-    if (userID == tmp_file_inode.di_uid)
+    if (!((checkwre(&tmp_file_inode, 'e') || checkwre(&tmp_file_inode, 'w'))))
     {
-        if (!(tmp_file_inode.permission & OWN_E))
-        {
-            printf("不好意思，你没有权限删除.\n");
-            return -1;
-        }
-    }
-    else if (users.groupID[userID] == tmp_file_inode.di_grp)
-    {
-        if (!(tmp_file_inode.permission & GRP_E))
-        {
-            printf("不好意思，没有权限删除.\n");
-            return -1;
-        }
-    }
-    else
-    {
-        if (!(tmp_file_inode.permission & ELSE_E))
-        {
-            printf("不好意思，没有权限删除.\n");
-            return -1;
-        }
+        printf("权限不够.\n");
+        return false;
     }
 
     //3.开始删除，inode赋值为0

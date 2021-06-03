@@ -36,30 +36,11 @@ bool RemoveDir(const char *dirname)
     } while (tmp_dir_inode.di_mode == 1);
 
     //3. 权限检
-    if (userID == tmp_dir_inode.di_uid)
-    {
-        if (!(tmp_dir_inode.permission & OWN_E))
+     if (!((checkwre(&tmp_dir_inode,'e')||checkwre(&tmp_dir_inode,'w'))))
         {
             printf("权限不够.\n");
             return false;
         }
-    }
-    else if (users.groupID[userID] == tmp_dir_inode.di_grp)
-    {
-        if (!(tmp_dir_inode.permission & GRP_E))
-        {
-            printf("权限不够.\n");
-            return false;
-        }
-    }
-    else
-    {
-        if (!(tmp_dir_inode.permission & ELSE_E))
-        {
-            printf("权限不够.\n");
-            return false;
-        }
-    }
     //4. 开始删除
     if (tmp_dir_inode.icount > 0)
     {

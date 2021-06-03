@@ -13,7 +13,7 @@ bool Copy(string v, string route, inode *&currentInode)
     memset(filename, 0, 14);
     vector<string> dir;
     dir = split(v, "/");
-    if (strcmp(dir[0].c_str(), "root") == 0)
+    if (strcmp(dir[0].c_str(), ab_dir[0]) == 0)
     {
         while (dir_pointer > 1)
         {
@@ -115,30 +115,10 @@ bool Copy(string v, string route, inode *&currentInode)
         fread(tmp_file_inode, sizeof(inode), 1, fd);
     } while (tmp_file_inode->di_mode == 0);
 
-    //权限检测
-    if (userID == tmp_file_inode->di_uid)
+    if (!checkwre(tmp_file_inode, 'e') && checkwre(tmp_file_inode, 'w'))
     {
-        if (!(tmp_file_inode->permission & OWN_E))
-        {
-            printf("权限不够.\n");
-            return false;
-        }
-    }
-    else if (users.groupID[userID] == tmp_file_inode->di_grp)
-    {
-        if (!(tmp_file_inode->permission & GRP_E))
-        {
-            printf("权限不够.\n");
-            return false;
-        }
-    }
-    else
-    {
-        if (!(tmp_file_inode->permission & ELSE_E))
-        {
-            printf("权限不够.\n");
-            return false;
-        }
+        printf("权限不够.\n");
+        return false;
     }
     //取绝对地址
     OpenMutipleDir(www);
@@ -147,7 +127,7 @@ bool Copy(string v, string route, inode *&currentInode)
     int path_pos = 0;
     vector<string> direct;
     direct = split(route, "/");
-    if (strcmp(direct[0].c_str(), "root") == 0)
+    if (strcmp(direct[0].c_str(), ab_dir[0]) == 0)
     {
         for (int i = 0; i < direct.size(); i++)
         {
@@ -203,24 +183,26 @@ bool Copy(string v, string route, inode *&currentInode)
         }
         strcat(absolute, "#");
     }
-    // cout << absolute << endl;
+    //cout << absolute << endl;
     char dirname[14];
     int pos_dir = 0;
     bool root = false;
     inode dir_inode;
     directory cur_dir;
     int i;
-    for (i = 0; i < 5; i++)
+    for (i = 0; i < 4; i++)
     {
         dirname[i] = absolute[i];
     }
-    dirname[i] = 0;
-    if (strcmp("root/", dirname) != 0)
+    if (strcmp(ab_dir[0], dirname) != 0)
     {
         cout << absolute << endl;
         printf("路径错误!\n");
         return false;
     }
+    dirname[i] = '/';
+    i++;
+    dirname[i] = 0;
     fseek(fd, INODE_START, SEEK_SET);
     fread(&dir_inode, sizeof(inode), 1, fd);
     for (int i = 5; absolute[i] != '#'; i++)
@@ -260,14 +242,8 @@ bool Copy(string v, string route, inode *&currentInode)
         if (strlen(cur_dir.fileName[i]) == 0)
         {
             strcat(cur_dir.fileName[i], filename);
-            int new_ino = 0;
-            for (; new_ino < INODE_NUM; new_ino++)
-            {
-                if (inode_bitmap[new_ino] == 0)
-                {
-                    break;
-                }
-            }
+            unsigned int new_ino = 0;
+            find_free_block(new_ino);
             inode ifile_tmp;
             ifile_tmp.i_ino = new_ino;
             ifile_tmp.icount = 0;
