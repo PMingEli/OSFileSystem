@@ -49,14 +49,14 @@ bool Login(const char *user, const char *password)
                     strcat(userName, users.userName[i]);
                     //strcat(userName, "#");
                 }
-                memset(ab_dir[dir_pointer], 0, 14);
-                strcpy(ab_dir[dir_pointer], users.userName[i]);
+                memset(ab_dir[0], 0, 14);
+                strcpy(ab_dir[0], users.userName[i]);
                 // ab_dir[dir_pointer][0] = 'r';
                 // ab_dir[dir_pointer][1] = 'o';
                 // ab_dir[dir_pointer][2] = 'o';
                 // ab_dir[dir_pointer][3] = 't';
                 // ab_dir[dir_pointer][4] = '\0';
-                dir_pointer++;
+                dir_pointer = 1;
                 return true;
             }
             else

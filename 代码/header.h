@@ -217,6 +217,9 @@ bool OpenDir(const char *dirname);
 //Vim打开文件
 void VimFile(inode &ifile);
 
+//清空文件
+bool ClearFile(string route);
+
 //显示当前目录下的文件信息
 void List();
 

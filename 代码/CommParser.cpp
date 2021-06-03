@@ -249,6 +249,35 @@ void CommParser(inode *&currentInode)
                 currentInode = OpenMutipleFile(v[1]);
             }
         }
+        //清空文件
+        else if (strcmp("clear", para1) == 0)
+        {
+            flag = false;
+            for (int i = 1; i < n; i++)
+            {
+                ClearFile(v[i]);
+            }
+        }
+        //Vim打开文件
+        else if (strcmp("vim", para1) == 0)
+        {
+            flag = true;
+            if (n < 2)
+            {
+                cout << "vim : 在vim后缺少了要操作的目标文件" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n > 2)
+            {
+                cout << "vim : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else
+            {
+                currentInode = OpenMutipleFile(v[1]);
+                VimFile(*currentInode);
+            }
+        }
         //写文件
         else if (strcmp("insert", para1) == 0)
         {
@@ -511,7 +540,6 @@ void CommParser(inode *&currentInode)
                         }
                     }
                 } while (Login(tmp_userName, tmp_userPassword) != true);
-
                 inode *currentInode = new inode;
             }
             else
