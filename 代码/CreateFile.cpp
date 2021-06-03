@@ -99,6 +99,7 @@ bool CreateFile(string route)
     ifile_tmp.di_mode = 1; //1 表示文件
     ifile_tmp.di_size = 0; //新文件大小为0
     memset(ifile_tmp.di_addr, -1, sizeof(unsigned int) * NADDR);
+    ifile_tmp.di_addr[0] = ifile_tmp.i_ino;
     for (unsigned int i = 0; i < BLOCK_SIZE; i++)
     {
         fseek(fd, DATA_START + ifile_tmp.di_addr[0] * BLOCK_SIZE + i, SEEK_SET);

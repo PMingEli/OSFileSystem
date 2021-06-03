@@ -235,6 +235,7 @@ void CommParser(inode *&currentInode)
                 else
                 {
                     currentInode = OpenMutipleFile(v[1]);
+                    //cout << currentInode->i_ino << endl;
                     for (int i = 2; i < n - 1; i++)
                     {
                         strcat(para2, v[i].c_str());
@@ -581,7 +582,9 @@ void CommParser(inode *&currentInode)
                 if (userID == 0)
                 {
                     Format();
+                    dir_pointer = 1;
                     Mount();
+                    dir_pointer = 1;
                     // printf("您真的要删除跑路吗？[y/n]\n");
                     // char label;
                     // cin >> label;
