@@ -36,11 +36,6 @@ void CommParser(inode *&currentInode)
             flag = false;
             List();
         }
-        else if (strcmp("chable", para1) == 0) //改变当前目录可见性
-        {
-            flag = false;
-            //chable();
-        }
         //文件复制
         else if (strcmp("cp", para1) == 0)
         {
@@ -123,21 +118,25 @@ void CommParser(inode *&currentInode)
         else if (strcmp("chmod", para1) == 0)
         {
             flag = false;
-            if (n == 1)
+            if (n < 3)
             {
                 cout << "chmod : 在chgrp后缺少了要操作的目标文件" << endl;
                 cout << "请尝试执行“help”来获取更多信息" << endl;
             }
-            else if (n > 2)
+            else if (n > 3)
             {
                 cout << "chmod : 参数过多" << endl;
                 cout << "请尝试执行“help”来获取更多信息" << endl;
             }
             else
             {
+                //char *type;
                 strcpy(para2, v[1].c_str());
+                //strcpy(type,v[2].c_str());
                 para2[1023] = 0;
-                Chmod(para2);
+               // cout<<"type:"<<type<<endl;
+               string str="111000111";
+                Chmod(para2,1,str);
             }
         }
         //更改用户权限

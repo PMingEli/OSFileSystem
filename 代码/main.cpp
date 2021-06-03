@@ -48,9 +48,13 @@ int main()
     //登录
     char tmp_userName[USER_NAME_LENGTH];
     char tmp_userPassword[USER_PASSWORD_LENGTH * 5];
-
+    int count=0;
     do
     {
+        if(count==3){
+            cout<<"错误次数过多！"<<endl;
+            return 0;
+        }
         memset(tmp_userName, 0, USER_NAME_LENGTH);
         memset(tmp_userPassword, 0, USER_PASSWORD_LENGTH * 5);
 
@@ -61,6 +65,7 @@ int main()
         char c;
         scanf("%c", &c);
         int i = 0;
+        count++;
         while (1)
         {
             char ch;

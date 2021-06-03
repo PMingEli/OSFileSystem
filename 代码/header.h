@@ -84,8 +84,7 @@ struct inode
     unsigned short permission;   //文件权限
     unsigned short di_uid;       //文件所属用户id.
     unsigned short di_grp;       //文件所属组
-    unsigned short di_size;      //文件大小.
-                                 // bool enable;                 //文件可见性
+    unsigned short di_size;      //文件大小                 //文件可见性
     char time[83];
 };
 
@@ -227,7 +226,7 @@ void List();
 void Ab_dir();
 
 //修改文件权限
-void Chmod(char *filename);
+void Chmod(char *filename,int type,string str);
 
 //改变文件所属
 void Chown(char *filename);
@@ -246,8 +245,6 @@ void Rename(char *filename, char *newfilename);
 
 //链接
 bool ln(string v, string route);
-//改变当前目录的可见性
-//void chable();
 
 //文件复制
 bool Copy(string v, string route, inode *&currentInode);
