@@ -1,6 +1,38 @@
 #include "header.h"
-bool Copy(char *filename, string route, inode *&currentInode)
+bool Copy(string v, string route, inode *&currentInode)
 {
+    char currentdir[1000];
+    memset(currentdir, 0, 1000);
+    for (int i = 0; i < dir_pointer; i++)
+    {
+        strcat(currentdir, ab_dir[i]);
+        strcat(currentdir, "/");
+    }
+    string www = currentdir;
+    char filename[14];
+    memset(filename, 0, 14);
+    vector<string> dir;
+    dir = split(v, "/");
+    if (strcmp(dir[0].c_str(), "root") == 0)
+    {
+        while (dir_pointer > 1)
+        {
+            OpenDir("..");
+        }
+        for (int i = 1; i < dir.size() - 1; i++)
+        {
+            OpenDir(dir[i].c_str());
+        }
+        strcpy(filename, dir[dir.size() - 1].c_str());
+    }
+    else
+    {
+        for (int i = 0; i < dir.size() - 1; i++)
+        {
+            OpenDir(dir[i].c_str());
+        }
+        strcpy(filename, dir[dir.size() - 1].c_str());
+    }
     currentInode = OpenFile(filename);
     int block_num = currentInode->di_size / BLOCK_SIZE + 1;
     //读取文件
@@ -109,6 +141,7 @@ bool Copy(char *filename, string route, inode *&currentInode)
         }
     }
     //取绝对地址
+    OpenMutipleDir(www);
     char absolute[1024];
     memset(absolute, 0, 1024);
     int path_pos = 0;
@@ -170,7 +203,7 @@ bool Copy(char *filename, string route, inode *&currentInode)
         }
         strcat(absolute, "#");
     }
-    cout << absolute << endl;
+    // cout << absolute << endl;
     char dirname[14];
     int pos_dir = 0;
     bool root = false;

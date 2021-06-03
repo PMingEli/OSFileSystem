@@ -52,29 +52,7 @@ void CommParser(inode *&currentInode)
             }
             else
             {
-                vector<string> directory;
-                directory = split(v[1], "/");
-                if (strcmp(directory[0].c_str(), "root") == 0)
-                {
-                    while (dir_pointer > 1)
-                    {
-                        OpenDir("..");
-                    }
-                    for (int i = 1; i < directory.size() - 1; i++)
-                    {
-                        OpenDir(directory[i].c_str());
-                    }
-                    strcpy(para2, directory[directory.size() - 1].c_str());
-                }
-                else
-                {
-                    for (int i = 0; i < directory.size() - 1; i++)
-                    {
-                        OpenDir(directory[i].c_str());
-                    }
-                    strcpy(para2, directory[directory.size() - 1].c_str());
-                }
-                Copy(para2, v[2], currentInode);
+                Copy(v[1], v[2], currentInode);
             }
         }
         else if (strcmp("mv", para1) == 0)
@@ -253,6 +231,7 @@ void CommParser(inode *&currentInode)
                 else
                 {
                     currentInode = OpenMutipleFile(v[1]);
+                    //cout << currentInode->i_ino << endl;
                     for (int i = 2; i < n - 1; i++)
                     {
                         strcat(para2, v[i].c_str());
