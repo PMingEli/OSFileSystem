@@ -27,6 +27,10 @@ unsigned short dir_pointer;
 
 vector<string> currentdir;
 
+vector<string> para1_history;
+
+int para1_ptr = 0;
+
 int main()
 {
     memset(ab_dir, 0, sizeof(ab_dir));
@@ -63,14 +67,15 @@ int main()
         scanf("%c", &c);
         int i = 0;
         while (1)
-        {
+        { // cout << loop_num;
+
             char ch;
             ch = getch();
             if (ch == '\b')
             {
                 if (i != 0)
                 {
-                    printf("\b \b");
+                    // printf("\b \b");
                     i--;
                 }
                 else

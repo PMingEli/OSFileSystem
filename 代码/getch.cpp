@@ -1,4 +1,4 @@
-#include"header.h"
+#include "header.h"
 //自定义不回显字符
 int getch()
 {
@@ -13,7 +13,10 @@ int getch()
     c = getchar();
     res = tcsetattr(STDIN_FILENO, TCSANOW, &org_opts);
     assert(res == 0);
-    if(c == '\n') c = '\r';
-    else if(c == 127) c = '\b';
+    if (c == '\n')
+        c = '\r';
+    else if (c == 127)
+        c = '\b';
+    // cout << c << endl;
     return c;
 }

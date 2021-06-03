@@ -141,6 +141,10 @@ extern unsigned short dir_pointer;
 
 extern vector<string> currentdir;
 
+extern vector<string> para1_history;
+
+extern int para1_ptr;
+
 //功能函数声明
 void CommParser(inode *&);
 
@@ -238,5 +242,7 @@ bool ln(char *filename);
 
 //文件复制
 bool Copy(string v, string route, inode *&currentInode);
+
+bool History(string para1);
 
 #endif // HEADER_H_INCLUDED

@@ -17,15 +17,119 @@ void CommParser(inode *&currentInode)
         memset(para2, 0, 1024);
         Printsign();
         string system;
-        getline(cin, system);
-        // while(system.==0){
+        // getline(cin, system);
+        int tmp_input_char;
+        tmp_input_char = getch();
+        int loop_num = 0;
+        bool up_button = false;
+        bool down_button = false;
+        // cout << loop_num;
+        while (tmp_input_char != 13)
+        {
+            // cout << "!!!!" << endl;
+            if (tmp_input_char != 27)
+            {
+                if (tmp_input_char == 8)
+                {
+                    if (loop_num != 0)
+                    {
+                        printf("\b \b");
+                        // cout << loop_num;
+                        system = system.substr(0, system.length() - 1);
+                        loop_num--;
+                    }
+                }
+                else
+                {
+                    loop_num++;
+                    cout << char(tmp_input_char);
+                    system.push_back(char(tmp_input_char));
+                }
+            }
+            else // if (tmp_input_char == 91)
+            {
+                tmp_input_char = getch();
+                if (tmp_input_char == 91)
+                {
+                    tmp_input_char = getch();
+                    if (para1_ptr >= 0 && para1_ptr < para1_history.size())
+                    {
+                        if (loop_num && para1_ptr != 0)
+                        {
+                            for (int i = 0; i < loop_num; i++)
+                            {
+                                printf("\b \b");
+                            }
+                            loop_num = 0;
+                        }
+                        if (tmp_input_char == 65)
+                        {
+                            if (para1_ptr != 0)
+                            {
+                                cout << para1_history.at(--para1_ptr);
+                                // cout << para1_ptr;
+                                up_button = true;
+                                system.assign(para1_history.at(para1_ptr));
+                                loop_num = para1_history.at(para1_ptr).size();
+                            }
+                            // para1_ptr--;
+                        }
+                        else if (tmp_input_char == 66)
+                        {
+                            if (para1_ptr == 0)
+                            {
+                                for (int i = 0; i < loop_num; i++)
+                                {
+                                    printf("\b \b");
+                                }
+                                loop_num = 0;
+                                down_button = true;
+                                cout << para1_history.at(++para1_ptr);
+                                system.assign(para1_history.at(para1_ptr));
+                                loop_num = para1_history.at(para1_ptr).size();
+                            }
+                            else if (para1_ptr != para1_history.size() - 1)
+                            {
+                                down_button = true;
+                                cout << para1_history.at(++para1_ptr);
+                                system.assign(para1_history.at(para1_ptr));
+                                loop_num = para1_history.at(para1_ptr).size();
+                            }
+                            // para1_ptr++;
+                        }
+                    }
+                }
+            }
+            tmp_input_char = getch();
+            // cout << "???" << endl;
+            // cout << tmp_input_char;
+        }
 
-        // }
         if (system.length() == 0)
         {
             continue;
         }
+        // for (int i = 0; i < system.size(); i = i + 3)
+        // {
+        //     cout << "11111" << endl;
+        //     if (int(system.c_str()[i]) == 27 && int(system.c_str()[i + 1]) == 91)
+        //     {
+        //         cout << "22222" << endl;
+        //         if (int(system.c_str()[i + 2]) == 65 && --para1_ptr > 0)
+        //         {
+        //             cout << "3333" << endl;
+        //             system.assign(para1_history.at(para1_ptr));
+        //         }
+        //         else if (int(system.c_str()[i + 2]) == 66 && para1_ptr < system.size())
+        //         {
+        //             system.assign(para1_history.at(++para1_ptr));
+        //         }
+        //         cout << system << endl;
+        //     }
+        // }
+        cout << endl;
         History(system);
+        loop_num = 0;
         v = split(system, " "); //根据多个字符切片
         n = v.size();
         strcpy(para1, v[0].c_str());
@@ -629,4 +733,5 @@ void CommParser(inode *&currentInode)
             }
         }
     }
+    cout << endl;
 };

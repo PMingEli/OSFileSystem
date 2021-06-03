@@ -2,6 +2,7 @@
 //登录模块
 bool Login(const char *user, const char *password)
 {
+
     //检测参数
     if (user == NULL || password == NULL)
     {
@@ -24,6 +25,7 @@ bool Login(const char *user, const char *password)
     //在账户文件中搜相应的账户名
     for (int i = 0; i < ACCOUNT_NUM; i++)
     {
+        // cout << users.userName[i];
         if (strcmp(users.userName[i], user) == 0)
         {
             //验证相应的密码
