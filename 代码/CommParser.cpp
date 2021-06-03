@@ -520,26 +520,6 @@ void CommParser(inode *&currentInode)
                 cout << "请尝试执行“help”来获取更多信息" << endl;
             }
         }
-        else if (strcmp("ln", para1) == 0)
-        {
-            flag = false;
-            if (n < 2)
-            {
-                cout << "ln : 缺少参数" << endl;
-                cout << "请尝试执行“help”来获取更多信息" << endl;
-            }
-            else if (n > 2)
-            {
-                cout << "ln : 参数过多" << endl;
-                cout << "请尝试执行“help”来获取更多信息" << endl;
-            }
-            else
-            {
-                strcpy(para2, v[1].c_str());
-                para2[1023] = 0; //security protection
-                //ln(para2);
-            }
-        }
         //登录
         else if (strcmp("su", para1) == 0)
         {
@@ -626,23 +606,6 @@ void CommParser(inode *&currentInode)
                     dir_pointer = 1;
                     Mount();
                     dir_pointer = 1;
-                    // printf("您真的要删除跑路吗？[y/n]\n");
-                    // char label;
-                    // cin >> label;
-                    // while (label != 'n' && label != 'N')
-                    // {
-                    //     if (label == 'y' || label == 'Y')
-                    //     {
-                    //         Format();
-                    //         Mount();
-                    //         break;
-                    //     }
-                    //     else
-                    //     {
-                    //         printf("输入错误，请重新输入[y/n]\n");
-                    //         cin >> label;
-                    //     }
-                    // }
                 }
                 else
                 {
@@ -659,15 +622,7 @@ void CommParser(inode *&currentInode)
         else
         {
             flag = false;
-            if (n == 1)
-            {
-                Help();
-            }
-            else
-            {
-                cout << "help : 参数过多" << endl;
-                cout << "请尝试执行“help”来获取更多信息" << endl;
-            }
+            Help();
         }
     }
 };

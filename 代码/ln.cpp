@@ -14,7 +14,7 @@ bool ln(string v, string route)
     memset(filename, 0, 14);
     vector<string> dir;
     dir = split(v, "/");
-    if (strcmp(dir[0].c_str(), "root") == 0)
+    if (strcmp(dir[0].c_str(), ab_dir[0]) == 0)
     {
         while (dir_pointer > 1)
         {
@@ -89,7 +89,7 @@ bool ln(string v, string route)
     int path_pos = 0;
     vector<string> direct;
     direct = split(route, "/");
-    if (strcmp(direct[0].c_str(), "root") == 0)
+    if (strcmp(direct[0].c_str(), ab_dir[0]) == 0)
     {
         for (int i = 0; i < direct.size(); i++)
         {
@@ -151,16 +151,18 @@ bool ln(string v, string route)
     inode dir_inode;
     directory cur_dir;
     int i;
-    for (i = 0; i < 5; i++)
+    for (i = 0; i < 4; i++)
     {
         dirname[i] = absolute[i];
     }
-    dirname[i] = 0;
-    if (strcmp("root/", dirname) != 0)
+    if (strcmp(ab_dir[0], dirname) != 0)
     {
         printf("路径错误!\n");
         return false;
     }
+    dirname[i] = '/';
+    i++;
+    dirname[i] = 0;
     fseek(fd, INODE_START, SEEK_SET);
     fread(&dir_inode, sizeof(inode), 1, fd);
     for (int i = 5; absolute[i] != '#'; i++)

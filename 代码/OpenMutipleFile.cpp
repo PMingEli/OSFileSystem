@@ -5,7 +5,7 @@ inode *OpenMutipleFile(string route)
     vector<string> directory;
     directory = split(route, "/");
     int n = directory.size();
-    if (strcmp(directory[0].c_str(), "root") == 0)
+    if (strcmp(directory[0].c_str(), ab_dir[0]) == 0)
     {
         while (dir_pointer > 1)
         {

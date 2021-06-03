@@ -7,7 +7,7 @@ bool CreateFile(string route)
     vector<string> direct;
     direct = split(route, "/");
     int n = direct.size();
-    if (strcmp(direct[0].c_str(), "root") == 0)
+    if (strcmp(direct[0].c_str(), ab_dir[0]) == 0)
     {
         while (dir_pointer > 1)
         {
@@ -25,7 +25,6 @@ bool CreateFile(string route)
             OpenDir(direct[i].c_str());
         }
     }
-
 
     strcpy(filename, direct[n - 1].c_str());
 

@@ -90,12 +90,6 @@ int main()
             }
         }
     } while (Login(tmp_userName, tmp_userPassword) != true);
-    ab_dir[dir_pointer][0] = 'r';
-    ab_dir[dir_pointer][1] = 'o';
-    ab_dir[dir_pointer][2] = 'o';
-    ab_dir[dir_pointer][3] = 't';
-    ab_dir[dir_pointer][4] = '\0';
-    dir_pointer++;
     inode *currentInode = new inode;
     CommParser(currentInode);
     return 0;
