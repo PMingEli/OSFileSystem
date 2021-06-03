@@ -576,6 +576,7 @@ void CommParser(inode *&currentInode)
                 if (userID == 0)
                 {
                     Format();
+                    dir_pointer = 1;
                     Mount();
                     // printf("您真的要删除跑路吗？[y/n]\n");
                     // char label;

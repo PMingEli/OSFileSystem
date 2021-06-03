@@ -162,7 +162,6 @@ bool Format()
 
     //关闭文件.
     fclose(fd);
-    dir_pointer = 1;
 
     return true;
 };

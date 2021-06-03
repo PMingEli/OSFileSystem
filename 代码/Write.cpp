@@ -103,10 +103,6 @@ int Write(inode &ifile, const char *content)
     char data[BLOCK_SIZE];
     if (num_block_needed == 0)
     {
-        // if(ifile.di_size==0){
-        //     fwrite("\0", BLOCK_SIZE, 1, fd);
-        //     fseek(fd, DATA_START + block_num * BLOCK_SIZE, SEEK_SET);
-        // }
         fwrite(content, len_content, 1, fd);
         fseek(fd, DATA_START + block_num * BLOCK_SIZE, SEEK_SET);
         fread(data, sizeof(data), 1, fd);
