@@ -359,7 +359,6 @@ void CommParser(inode *&currentInode)
                             strcpy(para2, v.at(1).c_str());
                             para2[1023] = 0;
                             MakeDir(para2);
-                            OpenDir("..");
                         }
                         else
                         {
