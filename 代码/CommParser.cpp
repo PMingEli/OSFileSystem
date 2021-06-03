@@ -356,9 +356,10 @@ void CommParser(inode *&currentInode)
                     {
                         if (v.at(m).find('/') == v.at(m).npos)
                         {
-                            strcpy(para2, v.at(1).c_str());
+                            strcpy(para2, v.at(m).c_str());
                             para2[1023] = 0;
                             MakeDir(para2);
+                            OpenDir("..");
                         }
                         else
                         {
