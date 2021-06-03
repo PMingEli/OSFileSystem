@@ -230,7 +230,7 @@ void List();
 void Ab_dir();
 
 //修改文件权限
-void Chmod(char *filename,int type,string str);
+void Chmod(string v, string str);
 
 //改变文件所属
 void Chown(char *filename);

@@ -237,6 +237,17 @@ bool Copy(string v, string route, inode *&currentInode)
     //更新当前目录
     fseek(fd, DATA_START + dir_inode.di_addr[0] * BLOCK_SIZE, SEEK_SET);
     fread(&cur_dir, sizeof(directory), 1, fd);
+    pos_in_directory = -1;
+    //int i=0;
+    pos_in_directory++;
+    for (; pos_in_directory < DIRECTORY_NUM; pos_in_directory++)
+    {
+        if (strcmp(cur_dir.fileName[pos_in_directory], filename) == 0)
+        {
+            cout << "cp：文件" << filename << "已存在" << endl;
+            return false;
+        }
+    }
     for (i = 0; i < DIRECTORY_NUM; i++)
     {
         if (strlen(cur_dir.fileName[i]) == 0)

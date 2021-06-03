@@ -32,6 +32,17 @@ void Rename(char *filename, char *newfilename)
         printf("权限不够.\n");
         return;
     }
+    pos_in_directory = -1;
+    //int i=0;
+    pos_in_directory++;
+    for (; pos_in_directory < DIRECTORY_NUM; pos_in_directory++)
+    {
+        if (strcmp(currentDirectory.fileName[pos_in_directory], newfilename) == 0)
+        {
+            cout << "mv：文件" << newfilename << "已存在" << endl;
+            return;
+        }
+    }
     for (int i = 0; i < DIRECTORY_NUM; i++)
     {
         if (currentDirectory.inodeID[i] == tmp_file_inode->i_ino)

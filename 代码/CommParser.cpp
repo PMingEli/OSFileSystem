@@ -128,7 +128,7 @@ void CommParser(inode *&currentInode)
         //     }
         // }
         cout << endl;
-        History(system);
+        //History(system);
         loop_num = 0;
         v = split(system, " "); //根据多个字符切片
         n = v.size();
@@ -222,9 +222,14 @@ void CommParser(inode *&currentInode)
         else if (strcmp("chmod", para1) == 0)
         {
             flag = false;
-            if (n < 3)
+            if (n == 1)
             {
-                cout << "chmod : 在chgrp后缺少了要操作的目标文件" << endl;
+                cout << "chmod : 在chmod后缺少了要操作的目标文件" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n == 2)
+            {
+                cout << "chmod : 缺少了操作数" << endl;
                 cout << "请尝试执行“help”来获取更多信息" << endl;
             }
             else if (n > 3)
@@ -234,13 +239,7 @@ void CommParser(inode *&currentInode)
             }
             else
             {
-                //char *type;
-                strcpy(para2, v[1].c_str());
-                //strcpy(type,v[2].c_str());
-                para2[1023] = 0;
-               // cout<<"type:"<<type<<endl;
-               string str="111000111";
-                Chmod(para2,1,str);
+                Chmod(v[1], v[2]);
             }
         }
         //更改用户权限
@@ -249,7 +248,7 @@ void CommParser(inode *&currentInode)
             flag = false;
             if (n == 1)
             {
-                cout << "chown : 在chgrp后缺少了要操作的目标文件" << endl;
+                cout << "chown : 在chown后缺少了要操作的目标文件" << endl;
                 cout << "请尝试执行“help”来获取更多信息" << endl;
             }
             else if (n > 2)
