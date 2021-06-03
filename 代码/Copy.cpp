@@ -183,7 +183,7 @@ bool Copy(string v, string route, inode *&currentInode)
         }
         strcat(absolute, "#");
     }
-    cout << absolute << endl;
+    //cout << absolute << endl;
     char dirname[14];
     int pos_dir = 0;
     bool root = false;

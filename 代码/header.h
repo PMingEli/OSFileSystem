@@ -242,7 +242,7 @@ void User_management();
 void Rename(char *filename, char *newfilename);
 
 //链接
-bool ln(char *filename);
+bool ln(string v, string route);
 //改变当前目录的可见性
 //void chable();
 

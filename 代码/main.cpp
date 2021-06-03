@@ -16,7 +16,7 @@ userPsw users;
 unsigned short userID = ACCOUNT_NUM;
 
 //用户组
-unsigned short userGroup =  ACCOUNT_NUM;
+unsigned short userGroup = ACCOUNT_NUM;
 
 //用户名
 char userName[USER_NAME_LENGTH + 6];
@@ -45,12 +45,6 @@ int main()
         Format();
     }
     Sys_start();
-    ab_dir[dir_pointer][0] = 'r';
-    ab_dir[dir_pointer][1] = 'o';
-    ab_dir[dir_pointer][2] = 'o';
-    ab_dir[dir_pointer][3] = 't';
-    ab_dir[dir_pointer][4] = '\0';
-    dir_pointer++;
     //登录
     char tmp_userName[USER_NAME_LENGTH];
     char tmp_userPassword[USER_PASSWORD_LENGTH * 5];
@@ -96,6 +90,12 @@ int main()
             }
         }
     } while (Login(tmp_userName, tmp_userPassword) != true);
+    ab_dir[dir_pointer][0] = 'r';
+    ab_dir[dir_pointer][1] = 'o';
+    ab_dir[dir_pointer][2] = 'o';
+    ab_dir[dir_pointer][3] = 't';
+    ab_dir[dir_pointer][4] = '\0';
+    dir_pointer++;
     inode *currentInode = new inode;
     CommParser(currentInode);
     return 0;

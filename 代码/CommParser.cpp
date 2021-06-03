@@ -55,14 +55,26 @@ void CommParser(inode *&currentInode)
                 cout << "cp: 在'" << v[1] << "' 后缺少了要操作的目标文件" << endl;
                 cout << "请尝试执行“help”来获取更多信息" << endl;
             }
-            else if (n > 3)
+            else if (n == 3)
             {
-                cout << "cp: 操作数过多" << endl;
-                cout << "请尝试执行“help”来获取更多信息" << endl;
+                if (strcmp(v[1].c_str(), "-l") == 0)
+                {
+                    cout << "cp: 在'" << v[2] << "' 后缺少了要操作的目标文件" << endl;
+                    cout << "请尝试执行“help”来获取更多信息" << endl;
+                }
+                else
+                {
+                    Copy(v[1], v[2], currentInode);
+                }
+            }
+            else if (n == 4)
+            {
+                ln(v[2], v[3]);
             }
             else
             {
-                Copy(v[1], v[2], currentInode);
+                cout << "cp: 操作数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
             }
         }
         //重命名
@@ -525,7 +537,7 @@ void CommParser(inode *&currentInode)
             {
                 strcpy(para2, v[1].c_str());
                 para2[1023] = 0; //security protection
-                ln(para2);
+                //ln(para2);
             }
         }
         //登录
