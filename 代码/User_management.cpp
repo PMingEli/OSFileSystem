@@ -8,15 +8,21 @@ void User_management()
         return;
     }
     printf("欢迎来到用户管理!\n");
+    //printf("1.查看 2.插入 3.删除 0.保存并退出\n");
     char c, d;
-    scanf("%c", &c);
-    while (c != '0')
-    {
-        printf("\n1.查看 2.插入 3.删除 0.保存 & 退出\n");
-        scanf("%c", &c);
+   //scanf("%c", &c);
+    bool flag=true;
+    //int i_loop=0;
+    while (flag)
+    {  
+        //printf("第%d次循环： c是：%c \n",i_loop,c);
+        //if(flag==true){
+        printf("choice:1.查看 2.插入 3.删除 0.保存并退出\n");
+        cin>>c;
+        //}
         switch (c)
         {
-        case '1':
+        case '1':{
             for (int i = 0; i < ACCOUNT_NUM; i++)
             {
                 if (users.userName[i][0] != 0)
@@ -24,14 +30,15 @@ void User_management()
                 else
                     break;
             }
-            scanf("%c", &c);
             break;
-        case '2':
-            int i;
+        }
+        case '2':{
+             int i;
             for (i = 0; i < ACCOUNT_NUM; i++)
             {
-                if (users.userName[i][0] == 0)
-                    break;
+                if (users.userName[i][0] == 0){
+                     break;
+                }
             }
             if (i == ACCOUNT_NUM)
             {
@@ -56,7 +63,7 @@ void User_management()
                     printf("请输入 group ID:");
                     int t;
                     scanf("%d", &t);
-                    scanf("%c", &c);
+                   // scanf("%c", &c);
                     if (t > 0)
                     {
                         users.groupID[i] = t;
@@ -71,21 +78,34 @@ void User_management()
                     break;
                 }
             }
+        }
+           
             break;
-        case '3':
+        case '3':{
             printf("请输入userID:");
             int tmp;
             scanf("%d", &tmp);
-            scanf("%c", &c);
+            //scanf("%c", &c);
             for (int j = tmp; j < ACCOUNT_NUM - 1; j++)
-            {
+               {
+                if(users.userName[j][0]!=0){
+                    //cout<<j<<endl;1
                 strcpy(users.userName[j], users.userName[j + 1]);
                 strcpy(users.password[j], users.password[j + 1]);
                 users.groupID[j] = users.groupID[j + 1];
-            }
-            printf("成功!\n");
+                }else{
+                    printf("删除成功！！\n"); 
+                    break;
+                }         
+            }          
+        }break;
+            
+
+        case '0':flag=false;break;
         }
+        //i_loop++; 
     }
+   
     fseek(fd, DATA_START + BLOCK_SIZE, SEEK_SET);
     fwrite(&users, sizeof(users), 1, fd);
 }
