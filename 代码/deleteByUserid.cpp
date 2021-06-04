@@ -17,13 +17,13 @@ void DeleteByUserID(int userid)
             
             if(tmp_inode.di_uid==userid){
                 if(tmp_inode.di_mode==0){
-                    cout<<currentDirectory.fileName[i]<<endl;
+                    //cout<<currentDirectory.fileName[i]<<endl;
                     RemoveDir(currentDirectory.fileName[i]);
                     //return ;
                 }else {
                     string rute="root/";
                     rute.append(currentDirectory.fileName[i]);
-                    cout<<rute<<endl;
+                    //cout<<rute<<endl;
                     DeleteFile(rute);
                     //return ;
                 }

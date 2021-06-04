@@ -90,8 +90,8 @@ void User_management()
                {
                 //cout<<"tmp:"<<users.userName[tmp][0]<<endl;
                 if(users.userName[j][0]!=0){
-                    cout<<j<<endl;
-                    cout<<users.userName[j][0]<<endl;
+                    //cout<<j<<endl;
+                    //cout<<users.userName[j][0]<<endl;
                     
                     strcpy(users.userName[j], users.userName[j + 1]);
                     strcpy(users.password[j], users.password[j + 1]);

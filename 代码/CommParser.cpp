@@ -104,7 +104,7 @@ void CommParser(inode *&currentInode)
             // cout << "???" << endl;
             // cout << tmp_input_char;
         }
-
+        // cout<<endl;
         if (system.length() == 0)
         {
             continue;
@@ -128,7 +128,7 @@ void CommParser(inode *&currentInode)
         //     }
         // }
         cout << endl;
-        //History(system);
+        History(system);
         loop_num = 0;
         v = split(system, " "); //根据多个字符切片
         n = v.size();

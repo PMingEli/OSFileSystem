@@ -42,6 +42,9 @@ bool Login(const char *user, const char *password)
                     strcat(userName, "superman");
                     strcat(userName, "@");
                     strcat(userName, users.userName[i]);
+                    // //读取当前目录
+                    // fseek(fd, DATA_START, SEEK_SET);
+                    // fread(&currentDirectory, sizeof(directory), 1, fd);
                     //strcat(userName, "$");
                 }
                 else
@@ -49,6 +52,8 @@ bool Login(const char *user, const char *password)
                     strcat(userName, "user");
                     strcat(userName, "@");
                     strcat(userName, users.userName[i]);
+                    // fseek(fd, DATA_START+2*userID*BLOCK_SIZE, SEEK_SET);
+                    // fread(&currentDirectory, sizeof(directory), 1, fd);
                     //strcat(userName, "#");
                 }
                 memset(ab_dir[0], 0, 14);
