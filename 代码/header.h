@@ -84,7 +84,7 @@ struct inode
     unsigned short permission;   //文件权限
     unsigned short di_uid;       //文件所属用户id.
     unsigned short di_grp;       //文件所属组
-    unsigned short di_size;      //文件大小                 //文件可见性
+    unsigned short di_size;      //文件大小
     char time[83];
 };
 
@@ -225,6 +225,8 @@ bool ClearFile(string route);
 
 //显示当前目录下的文件信息
 void List();
+//显示所有文件
+void List_a();
 
 //显示绝对目录.
 void Ab_dir();

@@ -140,6 +140,11 @@ void CommParser(inode *&currentInode)
             flag = false;
             List();
         }
+        else if (strcmp("ls_a", para1) == 0)//显示全部文件
+        {
+            flag=false;
+            List_a();
+        }
         //文件复制
         else if (strcmp("cp", para1) == 0)
         {

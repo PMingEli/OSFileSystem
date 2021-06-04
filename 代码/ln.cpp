@@ -58,29 +58,9 @@ bool ln(string v, string route)
     fseek(fd, INODE_START + tmp_file_ino * INODE_SIZE, SEEK_SET);
     fread(tmp_file_inode, sizeof(inode), 1, fd);
     //权限检测
-    if (userID == tmp_file_inode->di_uid)
-    {
-        if (!(tmp_file_inode->permission & OWN_E))
-        {
-            printf("没有权限.\n");
-            return false;
-        }
-    }
-    else if (users.groupID[userID] == tmp_file_inode->di_grp)
-    {
-        if (!(tmp_file_inode->permission & GRP_E))
-        {
-            printf("没有权限.\n");
-            return false;
-        }
-    }
-    else
-    {
-        if (!(tmp_file_inode->permission & ELSE_E))
-        {
-            printf("没有权限.\n");
-            return false;
-        }
+    if(!checkwre(tmp_file_inode,'e')){
+        cout<<"没有权限！！"<<endl;
+        return false;
     }
     //取得绝对地址
     OpenMutipleDir(www);

@@ -1,6 +1,6 @@
 #include "header.h"
-//显示当前目录下的本用户文件信息
-void List()
+//显示当前目录下的文件信息
+void List_a()
 {
     //检查权限
     //cout<<"ic:"<<curinode.i_ino<<"perss"<<curinode.permission<<endl;
@@ -24,10 +24,7 @@ void List()
             const char *tmp_type = tmp_inode.di_mode == 0 ? "d" : "-";
             const char *tmp_user = users.userName[tmp_inode.di_uid];
             const int tmp_grpID = tmp_inode.di_grp;
-            if(tmp_inode.di_uid==userID||userID==0){
-            // cout<<"tmp_inode"<<tmp_inode.i_ino<<endl;
-            
-            printf("%10s\t%s\t%d\t%d\t%d\t%u\t%s", currentDirectory.fileName[i], tmp_user, tmp_grpID, tmp_inode.i_ino, tmp_inode.icount, tmp_inode.di_size, tmp_type);
+          printf("%10s\t%s\t%d\t%d\t%d\t%u\t%s", currentDirectory.fileName[i], tmp_user, tmp_grpID, tmp_inode.i_ino, tmp_inode.icount, tmp_inode.di_size, tmp_type);
             for (int x = 8; x > 0; x--)
             {
                 if (tmp_inode.permission & (1 << x))
@@ -47,7 +44,6 @@ void List()
             else
                 printf("-\t");
             printf("%s\n", tmp_inode.time);
-            }
 
         }
     }
