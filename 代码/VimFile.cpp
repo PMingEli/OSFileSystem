@@ -4,6 +4,7 @@ void VimFile(inode &ifile)
 {
     if (&ifile == NULL)
     {
+        vimroute = "";
         return;
     }
     //权限检测
@@ -12,6 +13,7 @@ void VimFile(inode &ifile)
         if (!(ifile.permission & OWN_R))
         {
             printf("没有读取权限.\n");
+            vimroute = "";
             return;
         }
     }
@@ -20,6 +22,7 @@ void VimFile(inode &ifile)
         if (!(ifile.permission & GRP_R))
         {
             printf("没有读取权限.\n");
+            vimroute = "";
             return;
         }
     }
@@ -28,11 +31,12 @@ void VimFile(inode &ifile)
         if (!(ifile.permission & ELSE_R))
         {
             printf("没有读取权限.\n");
+            vimroute = "";
             return;
         }
     }
     ofstream in;
-    in.open("com.txt", ios::trunc); //ios::trunc表示在打开文件前将文件清空,由于是写入,文件不存在则创建
+    in.open("buffer.txt", ios::trunc); //ios::trunc表示在打开文件前将文件清空,由于是写入,文件不存在则创建
     int block_num = ifile.di_size / BLOCK_SIZE + 1;
     int print_line_num = 0; //16 bytes 每一行.
     //从块中读取文件
@@ -79,5 +83,5 @@ void VimFile(inode &ifile)
             }
         }
     }
-    system("gnome-terminal -- vim ./com.txt");
+    system("gnome-terminal -- vim ./buffer.txt");
 };

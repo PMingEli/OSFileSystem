@@ -34,6 +34,8 @@ vector<string> currentdir;
 
 vector<string> para1_history;
 
+string vimroute = "";
+
 int para1_ptr = 0;
 
 int main()
@@ -52,11 +54,12 @@ int main()
     //登录
     char tmp_userName[USER_NAME_LENGTH];
     char tmp_userPassword[USER_PASSWORD_LENGTH * 5];
-    int count=0;
+    int count = 0;
     do
     {
-        if(count==3){
-            cout<<"错误次数过多！"<<endl;
+        if (count == 3)
+        {
+            cout << "错误次数过多！" << endl;
             return 0;
         }
         memset(tmp_userName, 0, USER_NAME_LENGTH);

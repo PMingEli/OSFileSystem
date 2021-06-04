@@ -137,17 +137,34 @@ void CommParser(inode *&currentInode)
         //选择功能
         if (strcmp("ls", para1) == 0) //显示当前文件
         {
+            VimWriteBack();
             flag = false;
-            List();
-        }
-        else if (strcmp("ls_a", para1) == 0)//显示全部文件
-        {
-            flag=false;
-            List_a();
+            if (n == 1)
+            {
+                List();
+            }
+            else if (n == 2)
+            {
+                if (strcmp(v[1].c_str(), "-a") == 0)
+                {
+                    List_a();
+                }
+                else
+                {
+                    cout << "ls：参数错误" << endl;
+                    cout << "请尝试执行“help”来获取更多信息" << endl;
+                }
+            }
+            else
+            {
+                cout << "ls : 操作数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
         }
         //文件复制
         else if (strcmp("cp", para1) == 0)
         {
+            VimWriteBack();
             flag = false;
             if (n == 1)
             {
@@ -184,6 +201,7 @@ void CommParser(inode *&currentInode)
         //重命名
         else if (strcmp("mv", para1) == 0)
         {
+            VimWriteBack();
             flag = false;
             if (n == 1)
             {
@@ -214,18 +232,21 @@ void CommParser(inode *&currentInode)
         //显示当前目录
         else if (strcmp("pwd", para1) == 0)
         {
+            VimWriteBack();
             flag = false;
             Ab_dir();
         }
         //修改密码
         else if (strcmp("passwd", para1) == 0)
         {
+            VimWriteBack();
             flag = false;
             Passwd();
         }
         //用户权限
         else if (strcmp("chmod", para1) == 0)
         {
+            VimWriteBack();
             flag = false;
             if (n == 1)
             {
@@ -250,6 +271,7 @@ void CommParser(inode *&currentInode)
         //更改用户权限
         else if (strcmp("chown", para1) == 0)
         {
+            VimWriteBack();
             flag = false;
             if (n == 1)
             {
@@ -261,39 +283,45 @@ void CommParser(inode *&currentInode)
                 cout << "chown : 缺少操作数" << endl;
                 cout << "请尝试执行“help”来获取更多信息" << endl;
             }
-            else if(n>3){
+            else if (n > 3)
+            {
                 cout << "chown : 参数过多" << endl;
                 cout << "请尝试执行“help”来获取更多信息" << endl;
-            }else
+            }
+            else
             {
-                Chown(v[1],v[2]);
+                Chown(v[1], v[2]);
             }
         }
         //更改所属组
         else if (strcmp("chgrp", para1) == 0)
         {
+            VimWriteBack();
             flag = false;
             if (n == 1)
             {
                 cout << "chgrp : 在chgrp后缺少了要操作的目标文件" << endl;
                 cout << "请尝试执行“help”来获取更多信息" << endl;
             }
-             else if (n == 2)
+            else if (n == 2)
             {
                 cout << "chgrp : 缺少操作数" << endl;
                 cout << "请尝试执行“help”来获取更多信息" << endl;
             }
-            else if(n>3){
+            else if (n > 3)
+            {
                 cout << "chgrp : 参数过多" << endl;
                 cout << "请尝试执行“help”来获取更多信息" << endl;
-            }else
+            }
+            else
             {
-                Chgrp(v[1],v[2]);
+                Chgrp(v[1], v[2]);
             }
         }
         //显示信息
         else if (strcmp("info", para1) == 0)
         {
+            VimWriteBack();
             if (n == 1)
             {
                 printf("系统信息:\n总共的block:%d\n空闲block:%d\n总inode:%d\n剩余inode:%d\n\n", superBlock.s_num_block, superBlock.s_num_fblock, superBlock.s_num_inode, superBlock.s_num_finode);
@@ -324,6 +352,7 @@ void CommParser(inode *&currentInode)
         //创建文件
         else if (strcmp("create", para1) == 0)
         {
+            VimWriteBack();
             flag = false;
             for (int i = 1; i < n; i++)
             {
@@ -333,6 +362,7 @@ void CommParser(inode *&currentInode)
         //删除文件
         else if (strcmp("rm", para1) == 0)
         {
+            VimWriteBack();
             flag = false;
             for (int i = 1; i < n; i++)
             {
@@ -342,6 +372,7 @@ void CommParser(inode *&currentInode)
         //打开文件
         else if (strcmp("open", para1) == 0)
         {
+            VimWriteBack();
             flag = true;
             if (n < 2)
             {
@@ -361,6 +392,7 @@ void CommParser(inode *&currentInode)
         //清空文件
         else if (strcmp("clear", para1) == 0)
         {
+            VimWriteBack();
             flag = false;
             for (int i = 1; i < n; i++)
             {
@@ -370,6 +402,7 @@ void CommParser(inode *&currentInode)
         //Vim打开文件
         else if (strcmp("vim", para1) == 0)
         {
+            VimWriteBack();
             flag = true;
             if (n < 2)
             {
@@ -383,6 +416,7 @@ void CommParser(inode *&currentInode)
             }
             else
             {
+                vimroute = v[1];
                 currentInode = OpenMutipleFile(v[1]);
                 VimFile(*currentInode);
             }
@@ -390,6 +424,7 @@ void CommParser(inode *&currentInode)
         //写文件
         else if (strcmp("insert", para1) == 0)
         {
+            VimWriteBack();
             if (flag)
             {
                 for (int i = 1; i < n - 1; i++)
@@ -432,6 +467,7 @@ void CommParser(inode *&currentInode)
         //读文件
         else if (strcmp("cat", para1) == 0)
         {
+            VimWriteBack();
             if (flag)
             {
                 if (n == 1)
@@ -481,6 +517,7 @@ void CommParser(inode *&currentInode)
         //打开一个目录
         else if (strcmp("cd", para1) == 0)
         {
+            VimWriteBack();
             flag = false;
             if (n == 2)
             {
@@ -495,6 +532,7 @@ void CommParser(inode *&currentInode)
         //创建目录
         else if (strcmp("mkdir", para1) == 0)
         {
+            VimWriteBack();
             flag = false;
             if (n < 2)
                 cout << "mkdir: 缺少操作数" << endl
@@ -556,6 +594,7 @@ void CommParser(inode *&currentInode)
         //删除目录
         else if (strcmp("rmdir", para1) == 0)
         {
+            VimWriteBack();
             flag = false;
             if (n < 2)
             {
@@ -604,6 +643,7 @@ void CommParser(inode *&currentInode)
         //登出系统
         else if (strcmp("logout", para1) == 0)
         {
+            VimWriteBack();
             flag = false;
             if (n == 1)
             {
@@ -660,12 +700,14 @@ void CommParser(inode *&currentInode)
         //登录
         else if (strcmp("su", para1) == 0)
         {
+            VimWriteBack();
             flag = false;
             if (n == 1)
             {
                 Logout();
                 char para3[USER_PASSWORD_LENGTH * 5];
                 memset(para3, 0, USER_PASSWORD_LENGTH + 1);
+                //strcpy(para2, v[1].c_str());
                 scanf("%s", para2);
                 para2[1023] = 0;
                 printf("密码: ");
@@ -707,6 +749,7 @@ void CommParser(inode *&currentInode)
         }
         else if (strcmp("Muser", para1) == 0)
         {
+            VimWriteBack();
             flag = false;
             if (n == 1)
             {
@@ -721,6 +764,7 @@ void CommParser(inode *&currentInode)
         //退出系统
         else if (strcmp("exit", para1) == 0)
         {
+            VimWriteBack();
             flag = false;
             if (n == 1)
             {
@@ -758,6 +802,7 @@ void CommParser(inode *&currentInode)
         //help
         else
         {
+            VimWriteBack();
             flag = false;
             Help();
         }

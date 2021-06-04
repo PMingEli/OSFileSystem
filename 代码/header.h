@@ -13,6 +13,7 @@
 #include <fstream>
 #include <vector>
 #include <cstring>
+#include <sstream>
 using namespace std;
 
 //以下定义常量
@@ -150,6 +151,8 @@ extern vector<string> para1_history;
 
 extern int para1_ptr;
 
+extern string vimroute;
+
 //功能函数声明
 void CommParser(inode *&);
 
@@ -219,6 +222,9 @@ bool OpenDir(const char *dirname);
 
 //Vim打开文件
 void VimFile(inode &ifile);
+
+//Vim写回
+bool VimWriteBack();
 
 //清空文件
 bool ClearFile(string route);
