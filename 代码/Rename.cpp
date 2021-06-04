@@ -47,15 +47,11 @@ void Rename(char *filename, char *newfilename)
     {
         if (currentDirectory.inodeID[i] == tmp_file_inode->i_ino)
         {
-
             strcpy(currentDirectory.fileName[i], newfilename);
-            cout << currentDirectory.fileName[i]
-                 << endl;
             break;
         }
     }
-    fseek(fd, DATA_START + tmp_file_inode->di_addr[0] * BLOCK_SIZE, SEEK_SET);
+    fseek(fd, DATA_START + currentDirectory.inodeID[0] * BLOCK_SIZE, SEEK_SET);
     fwrite(&currentDirectory, sizeof(directory), 1, fd);
-    cout << "success" << endl;
     return;
 }
