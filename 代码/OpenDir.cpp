@@ -31,10 +31,13 @@ bool OpenDir(const char *dirname)
     fread(&tmp_dir_inode, sizeof(inode), 1, fd);
     if (tmp_dir_inode.di_mode == 0)
     {
-          if(!(checkwre(&tmp_dir_inode,'e')&&checkwre(&tmp_dir_inode,'r'))){
+        if(dirname[0]!='.'){
+            if(!(checkwre(&tmp_dir_inode,'e')&&checkwre(&tmp_dir_inode,'r'))){
               cout<<"没有权限！！"<<endl;
-            return false;
+                return false;
+            }
         }
+          
         //3. 更新当前目录.
         directory new_current_dir;
         curinode =tmp_dir_inode;
