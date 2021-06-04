@@ -324,7 +324,7 @@ void CommParser(inode *&currentInode)
             VimWriteBack();
             if (n == 1)
             {
-                printf("系统信息:\n总共的block:%d\n空闲block:%d\n总inode:%d\n剩余inode:%d\n\n", superBlock.s_num_block, superBlock.s_num_fblock, superBlock.s_num_inode, superBlock.s_num_finode);
+                printf("系统信息:\n总共的block:%d\n空闲block:%d\n总inode:%d\n剩余inode:%d\n\n", superBlock.s_num_block-3-64, superBlock.s_num_fblock, superBlock.s_num_inode, superBlock.s_num_finode);
                 for (int i = 0; i < 50; i++)
                 {
                     if (i == 0)
@@ -581,7 +581,7 @@ void CommParser(inode *&currentInode)
                             strcpy(para2, v.at(m).c_str());
                             para2[1023] = 0;
                             MakeDir(para2);
-                            // OpenDir("..");
+                            //OpenDir("..");
                         }
                         else
                         {
