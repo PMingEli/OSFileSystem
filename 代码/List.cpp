@@ -26,8 +26,8 @@ void List()
             if (tmp_inode.di_uid == userID || userID == 0)
             {
                 // cout<<"tmp_inode"<<tmp_inode.i_ino<<endl;
-
-                printf("%10s\t%s\t%d\t%d\t%d\t%u\t%s", currentDirectory.fileName[i], tmp_user, tmp_grpID, tmp_inode.i_ino, tmp_inode.icount, tmp_inode.di_size, tmp_type);
+                if(checkwre(&tmp_inode,'e')){
+                    printf("%10s\t%s\t%d\t%d\t%d\t%u\t%s", currentDirectory.fileName[i], tmp_user, tmp_grpID, tmp_inode.i_ino, tmp_inode.icount, tmp_inode.di_size, tmp_type);
                 for (int x = 8; x > 0; x--)
                 {
                     if (tmp_inode.permission & (1 << x))
@@ -47,6 +47,9 @@ void List()
                 else
                     printf("-\t");
                 printf("%s\n", tmp_inode.time);
+                }
+
+                
             }
         }
     }
