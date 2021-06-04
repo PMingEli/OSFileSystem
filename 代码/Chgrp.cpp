@@ -1,10 +1,40 @@
 #include "header.h"
 //改变文件所属组.
-void Chgrp(char *filename)
+void Chgrp(string v, string str)
 {
-    printf("0=文件，1=目录，请选择:");
-    int tt;
-    scanf("%d", &tt);
+    char currentdir[1000];
+    memset(currentdir, 0, 1000);
+    for (int i = 0; i < dir_pointer; i++)
+    {
+        strcat(currentdir, ab_dir[i]);
+        strcat(currentdir, "/");
+    }
+    string www = currentdir;
+    char filename[14];
+    memset(filename, 0, 14);
+    vector<string> dir;
+    dir = split(v, "/");
+    if (strcmp(dir[0].c_str(), ab_dir[0]) == 0)
+    {
+        while (dir_pointer > 1)
+        {
+            OpenDir("..");
+        }
+        for (int i = 1; i < dir.size() - 1; i++)
+        {
+            OpenDir(dir[i].c_str());
+        }
+        strcpy(filename, dir[dir.size() - 1].c_str());
+    }
+    else
+    {
+        for (int i = 0; i < dir.size() - 1; i++)
+        {
+            OpenDir(dir[i].c_str());
+        }
+        strcpy(filename, dir[dir.size() - 1].c_str());
+    }
+    
     if (filename == NULL || strlen(filename) > FILE_NAME_LENGTH)
     {
         printf("不合法.\n");
@@ -12,8 +42,7 @@ void Chgrp(char *filename)
     }
     int pos_in_directory = -1;
     inode *tmp_file_inode = new inode;
-    do
-    {
+   
         pos_in_directory++;
         for (; pos_in_directory < DIRECTORY_NUM; pos_in_directory++)
         {
@@ -30,39 +59,18 @@ void Chgrp(char *filename)
         int tmp_file_ino = currentDirectory.inodeID[pos_in_directory];
         fseek(fd, INODE_START + tmp_file_ino * INODE_SIZE, SEEK_SET);
         fread(tmp_file_inode, sizeof(inode), 1, fd);
-    } while (tmp_file_inode->di_mode == tt);
-
-    if (userID == tmp_file_inode->di_uid)
-    {
-        if (!(tmp_file_inode->permission & OWN_E))
-        {
-            printf("权限不够.\n");
-            return;
-        }
+    
+    //检测权限
+    if(!((checkwre(tmp_file_inode,'w')&&checkwre(tmp_file_inode,'e')))){
+        cout<<"没有权限！！！"<<endl;
+        return;
     }
-    else if (users.groupID[userID] == tmp_file_inode->di_grp)
-    {
-        if (!(tmp_file_inode->permission & GRP_E))
-        {
-            printf("权限不够.\n");
-            return;
-        }
-    }
-    else
-    {
-        if (!(tmp_file_inode->permission & ELSE_E))
-        {
-            printf("权限不够.\n");
-            return;
-        }
-    }
-
-    printf("请输入组号:");
-    int ttt, i;
-    scanf("%d", &ttt);
+    
+    int  i;
+    
     for (i = 0; i < ACCOUNT_NUM; i++)
     {
-        if (users.groupID[i] == ttt)
+        if (users.groupID[i] == atoi(str.c_str()))
             break;
     }
     if (i == ACCOUNT_NUM)
@@ -70,7 +78,7 @@ void Chgrp(char *filename)
         printf("用户错误!\n");
         return;
     }
-    tmp_file_inode->di_grp = ttt;
+    tmp_file_inode->di_grp =atoi(str.c_str());
     fseek(fd, INODE_START + tmp_file_inode->i_ino * INODE_SIZE, SEEK_SET);
     fwrite(tmp_file_inode, sizeof(inode), 1, fd);
     return;

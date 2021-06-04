@@ -251,16 +251,17 @@ void CommParser(inode *&currentInode)
                 cout << "chown : 在chown后缺少了要操作的目标文件" << endl;
                 cout << "请尝试执行“help”来获取更多信息" << endl;
             }
-            else if (n > 2)
+            else if (n == 2)
             {
-                cout << "chown : 参数过多" << endl;
+                cout << "chown : 缺少操作数" << endl;
                 cout << "请尝试执行“help”来获取更多信息" << endl;
             }
-            else
+            else if(n>3){
+                cout << "chown : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }else
             {
-                strcpy(para2, v[1].c_str());
-                para2[1023] = 0;
-                Chown(para2);
+                Chown(v[1],v[2]);
             }
         }
         //更改所属组
@@ -272,16 +273,17 @@ void CommParser(inode *&currentInode)
                 cout << "chgrp : 在chgrp后缺少了要操作的目标文件" << endl;
                 cout << "请尝试执行“help”来获取更多信息" << endl;
             }
-            else if (n > 2)
+             else if (n == 2)
             {
-                cout << "chgrp : 参数过多" << endl;
+                cout << "chgrp : 缺少操作数" << endl;
                 cout << "请尝试执行“help”来获取更多信息" << endl;
             }
-            else
+            else if(n>3){
+                cout << "chgrp : 参数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }else
             {
-                strcpy(para2, v[1].c_str());
-                para2[1023] = 0;
-                Chgrp(para2);
+                Chgrp(v[1],v[2]);
             }
         }
         //显示信息
