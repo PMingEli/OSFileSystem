@@ -85,18 +85,26 @@ void User_management()
             printf("请输入userID:");
             int tmp;
             scanf("%d", &tmp);
-            //scanf("%c", &c);
+            DeleteByUserID(tmp);
             for (int j = tmp; j < ACCOUNT_NUM - 1; j++)
                {
+                //cout<<"tmp:"<<users.userName[tmp][0]<<endl;
                 if(users.userName[j][0]!=0){
-                    //cout<<j<<endl;1
-                strcpy(users.userName[j], users.userName[j + 1]);
-                strcpy(users.password[j], users.password[j + 1]);
-                users.groupID[j] = users.groupID[j + 1];
-                }else{
+                    cout<<j<<endl;
+                    cout<<users.userName[j][0]<<endl;
+                    
+                    strcpy(users.userName[j], users.userName[j + 1]);
+                    strcpy(users.password[j], users.password[j + 1]);
+                    users.groupID[j] = users.groupID[j + 1];
+                }else if(j-tmp>0){
+                    
                     printf("删除成功！！\n"); 
                     break;
-                }         
+                }
+                else if(j-tmp==0){
+                cout<<"查无此人！！！"<<endl;
+                break;
+                }                              
             }          
         }break;
             

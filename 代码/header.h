@@ -251,6 +251,8 @@ void Passwd();
 
 //用户管理
 void User_management();
+//删除用户的文件
+void DeleteByUserID(int userid);
 
 //对文件或目录重命名
 void Rename(char *filename, char *newfilename);
