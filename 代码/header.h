@@ -233,10 +233,10 @@ void Ab_dir();
 void Chmod(string v, string str);
 
 //改变文件所属
-void Chown(char *filename);
+void Chown(string v,string str);
 
 //改变文件所属组.
-void Chgrp(char *filename);
+void Chgrp(string v,string str);
 
 //修改密码
 void Passwd();
