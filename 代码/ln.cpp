@@ -58,8 +58,9 @@ bool ln(string v, string route)
     fseek(fd, INODE_START + tmp_file_ino * INODE_SIZE, SEEK_SET);
     fread(tmp_file_inode, sizeof(inode), 1, fd);
     //权限检测
-    if(!checkwre(tmp_file_inode,'e')){
-        cout<<"没有权限！！"<<endl;
+    if (!checkwre(tmp_file_inode, 'e'))
+    {
+        cout << "没有权限！！" << endl;
         return false;
     }
     //取得绝对地址
@@ -183,7 +184,7 @@ bool ln(string v, string route)
     {
         if (strcmp(cur_dir.fileName[pos_in_directory], filename) == 0)
         {
-            cout << "cp：文件" << filename << "已存在" << endl;
+            cout << "cp：" << filename << "已存在" << endl;
             return false;
         }
     }

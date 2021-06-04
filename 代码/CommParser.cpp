@@ -198,6 +198,31 @@ void CommParser(inode *&currentInode)
                 cout << "请尝试执行“help”来获取更多信息" << endl;
             }
         }
+        //改变目录
+        else if (strcmp("chdir", para1) == 0)
+        {
+            VimWriteBack();
+            flag = false;
+            if (n == 1)
+            {
+                cout << "chdir: 缺少了文件操作数" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n == 2)
+            {
+                cout << "chdir: 在'" << v[1] << "' 后缺少了要操作的目标文件" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+            else if (n == 3)
+            {
+                chdir(v[1], v[2]);
+            }
+            else
+            {
+                cout << "chdir: 操作数过多" << endl;
+                cout << "请尝试执行“help”来获取更多信息" << endl;
+            }
+        }
         //重命名
         else if (strcmp("mv", para1) == 0)
         {
@@ -324,7 +349,7 @@ void CommParser(inode *&currentInode)
             VimWriteBack();
             if (n == 1)
             {
-                printf("系统信息:\n总共的block:%d\n空闲block:%d\n总inode:%d\n剩余inode:%d\n\n", superBlock.s_num_block-3-64, superBlock.s_num_fblock, superBlock.s_num_inode, superBlock.s_num_finode);
+                printf("系统信息:\n总共的block:%d\n空闲block:%d\n总inode:%d\n剩余inode:%d\n\n", superBlock.s_num_block - 3 - 64, superBlock.s_num_fblock, superBlock.s_num_inode, superBlock.s_num_finode);
                 for (int i = 0; i < 50; i++)
                 {
                     if (i == 0)

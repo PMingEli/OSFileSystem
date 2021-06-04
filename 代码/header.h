@@ -241,10 +241,10 @@ void Ab_dir();
 void Chmod(string v, string str);
 
 //改变文件所属
-void Chown(string v,string str);
+void Chown(string v, string str);
 
 //改变文件所属组.
-void Chgrp(string v,string str);
+void Chgrp(string v, string str);
 
 //修改密码
 void Passwd();
@@ -259,6 +259,8 @@ void Rename(char *filename, char *newfilename);
 
 //链接
 bool ln(string v, string route);
+
+bool chdir(string v, string route);
 
 //文件复制
 bool Copy(string v, string route, inode *&currentInode);
